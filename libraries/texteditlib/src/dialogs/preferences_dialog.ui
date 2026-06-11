@@ -1,0 +1,1385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>texteditLib::PreferencesDialog</class>
+ <widget class="QDialog" name="texteditLib::PreferencesDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>744</width>
+    <height>678</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_4">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="generalTab">
+      <attribute name="title">
+       <string>General</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QGroupBox" name="_displayGroup">
+           <property name="styleSheet">
+            <string notr="true">/*
+QGroupBox{font-weight: bold;}
+::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center; /* position at the top center 
+}
+*/
+QGroupBox::title  {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 4px 8000px 4px 8000px;
+    background-color: #FF17365D;
+    color: rgb(255, 255, 255);
+}</string>
+           </property>
+           <property name="title">
+            <string>Display</string>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="1" column="0">
+               <widget class="QCheckBox" name="_markersCheck">
+                <property name="text">
+                 <string>Show Markers</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="_lineNumbersCheck">
+                <property name="text">
+                 <string>Show Line Numbers</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QCheckBox" name="_changeBarsCheck">
+                <property name="text">
+                 <string>Show Change Bars</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QCheckBox" name="_eolCheck">
+                <property name="text">
+                 <string>Show End-of-lines</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QCheckBox" name="_highlightCheck">
+                <property name="text">
+                 <string>Highlight Current Line</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QCheckBox" name="_matchCheck">
+                <property name="text">
+                 <string>Highlight Matching Braces</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QCheckBox" name="_indentationCheck">
+                <property name="text">
+                 <string>Show Indentation Guides</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QCheckBox" name="_whitespaceCheck">
+                <property name="text">
+                 <string>Show Whitespace</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <layout class="QHBoxLayout" name="horizontalLayout_10">
+                <item>
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>Marker Icon</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="_markerCombo">
+                  <property name="maximumSize">
+                   <size>
+                    <width>60</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../../../../icons/textedit/textedit_icons.qrc">
+                     <normaloff>:/textedit/greenCircle</normaloff>:/textedit/greenCircle</iconset>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../../../../icons/textedit/textedit_icons.qrc">
+                     <normaloff>:/textedit/yellowCircle</normaloff>:/textedit/yellowCircle</iconset>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../../../../icons/textedit/textedit_icons.qrc">
+                     <normaloff>:/textedit/redCircle</normaloff>:/textedit/redCircle</iconset>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../../../../icons/textedit/textedit_icons.qrc">
+                     <normaloff>:/textedit/whiteFlag</normaloff>:/textedit/whiteFlag</iconset>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../../../../icons/textedit/textedit_icons.qrc">
+                     <normaloff>:/textedit/greenFlag</normaloff>:/textedit/greenFlag</iconset>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../../../../icons/textedit/textedit_icons.qrc">
+                     <normaloff>:/textedit/yellowFlag</normaloff>:/textedit/yellowFlag</iconset>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../../../../icons/textedit/textedit_icons.qrc">
+                     <normaloff>:/textedit/redFlag</normaloff>:/textedit/redFlag</iconset>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>:/textedit/rightArrow</normaloff>:/textedit/rightArrow</iconset>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>:/textedit/leftArrow</normaloff>:/textedit/leftArrow</iconset>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>:/textedit/check</normaloff>:/textedit/check</iconset>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>:/textedit/warning</normaloff>:/textedit/warning</iconset>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>:/textedit/error</normaloff>:/textedit/error</iconset>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_10">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QGroupBox" name="_tabsGroup">
+           <property name="font">
+            <font>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">/*
+QGroupBox {
+	font-weight: bold;
+}
+::title {
+   subcontrol-origin: margin;
+   subcontrol-position: top center; 
+}
+*/
+QGroupBox::title  {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 4px 8000px 4px 8000px;
+    background-color: #FF17365D;
+    color: rgb(255, 255, 255);
+}</string>
+           </property>
+           <property name="title">
+            <string>Tabs</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="_tabSizeSpin"/>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="_tabPolicyCombo">
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+              </property>
+              <item>
+               <property name="text">
+                <string>Tabs</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Spaces</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="_tabPolicyLabel">
+              <property name="text">
+               <string>Tab Policy</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="_tabSizeLabel">
+              <property name="text">
+               <string>Tab Size</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <spacer name="verticalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Orientation::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="_typingGroup">
+           <property name="styleSheet">
+            <string notr="true">/*
+QGroupBox{font-weight: bold;}
+::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center; 
+}
+*/
+QGroupBox::title  {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 4px 8000px 4px 8000px;
+    background-color: #FF17365D;
+    color: rgb(255, 255, 255);
+}</string>
+           </property>
+           <property name="title">
+            <string>Typing</string>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <property name="spacing">
+             <number>7</number>
+            </property>
+            <property name="topMargin">
+             <number>11</number>
+            </property>
+            <property name="rightMargin">
+             <number>11</number>
+            </property>
+            <property name="bottomMargin">
+             <number>11</number>
+            </property>
+            <item>
+             <widget class="QCheckBox" name="_autoIndentCheck">
+              <property name="text">
+               <string>Auto-indent</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="_unindentCheck">
+              <property name="text">
+               <string>Backspace Unindents</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="_autoPairCheck">
+              <property name="text">
+               <string>Auto-pair quotes/braces</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="_autoEncloseCheck">
+              <property name="text">
+               <string>Auto-enclose selected</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Orientation::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="_textWrappingGroup">
+           <property name="styleSheet">
+            <string notr="true">/*
+QGroupBox{font-weight: bold;}
+::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center; 
+}
+*/
+QGroupBox::title  {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 4px 8000px 4px 8000px;
+    background-color: #FF17365D;
+    color: rgb(255, 255, 255);
+}</string>
+           </property>
+           <property name="title">
+            <string>Right Edge</string>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <property name="sizeConstraint">
+             <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+            </property>
+            <item>
+             <widget class="QCheckBox" name="_lineWrapCheck">
+              <property name="text">
+               <string>Line Wrap</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QCheckBox" name="_rightEdgeCheck">
+                <property name="text">
+                 <string>Display Right Edge At Column:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="_rightEdgeSpin">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="maximum">
+                 <number>999</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Orientation::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QGroupBox" name="_colorsGroup">
+           <property name="styleSheet">
+            <string notr="true">/*
+QGroupBox{font-weight: bold;}
+::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+}
+*/
+QGroupBox::title  {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 4px 8000px 4px 8000px;
+    background-color: #FF17365D;
+    color: rgb(255, 255, 255);
+}</string>
+           </property>
+           <property name="title">
+            <string>Colors</string>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <layout class="QGridLayout" name="gridLayout_3">
+              <item row="3" column="6">
+               <widget class="ColorButton" name="_whitespaceBgButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="ColorButton" name="_rightEdgeButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="5">
+               <widget class="QLabel" name="_whitespaceFgLabel">
+                <property name="text">
+                 <string>Whitespace Foreground</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="6">
+               <widget class="ColorButton" name="_unmatchedBgButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="6">
+               <widget class="ColorButton" name="_whitespaceFgButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="ColorButton" name="_bgButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="ColorButton" name="_selectionButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="ColorButton" name="_highlightButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="6">
+               <widget class="ColorButton" name="_unmatchedFgButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="5">
+               <widget class="QLabel" name="_whitespaceBgLabel">
+                <property name="text">
+                 <string>Whitespace Background</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="5">
+               <widget class="QLabel" name="_unmatchedBgLabel">
+                <property name="text">
+                 <string>Unmatched Brace Background</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="5">
+               <widget class="QLabel" name="_unmatchedFgLabel">
+                <property name="text">
+                 <string>Unmatched Brace Foreground</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="_bgLabel">
+                <property name="text">
+                 <string>Background</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="_highlightLabel">
+                <property name="text">
+                 <string>Line Highlight</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="_rightEdgeLabel">
+                <property name="text">
+                 <string>Right Edge</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="_selectionLabel">
+                <property name="text">
+                 <string>Selection</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="_marginFgLabel">
+                <property name="text">
+                 <string>Margin Foreground</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="2">
+               <widget class="ColorButton" name="_marginFgButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="_marginBgLabel">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::NoFrame</enum>
+                </property>
+                <property name="text">
+                 <string>Margin Background</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLabel" name="_indentationFgLabel">
+                <property name="text">
+                 <string>Indentation Foreground</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <widget class="ColorButton" name="_indentationFgButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QLabel" name="_indentationBgLabel">
+                <property name="text">
+                 <string>Indentation Background</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="4">
+               <widget class="ColorButton" name="_indentationBgButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="3">
+               <widget class="QLabel" name="_matchedFgLabel">
+                <property name="text">
+                 <string>Matched Brace Foreground</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="4">
+               <widget class="ColorButton" name="_matchedFgButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3">
+               <widget class="QLabel" name="_matchedBgLabel">
+                <property name="text">
+                 <string>Matched Brace Background</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2">
+               <widget class="ColorButton" name="_marginBgButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="4">
+               <widget class="ColorButton" name="_matchedBgButton">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QPushButton" name="_genDefaultsButton">
+           <property name="text">
+            <string>Defaults</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="stylesTab">
+      <attribute name="title">
+       <string>Styles</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="_langGroup">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <property name="verticalSpacing">
+           <number>0</number>
+          </property>
+          <item row="3" column="0">
+           <widget class="QLabel" name="_defExtLabel">
+            <property name="styleSheet">
+             <string notr="true">background-color: #FF17365D;
+color: rgb(255, 255, 255);
+padding: 4px 40px 4px 40px;</string>
+            </property>
+            <property name="text">
+             <string>Default Ext</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QLineEdit" name="_userExtEntry"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QListWidget" name="_langList"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLineEdit" name="_defExtEntry">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QListWidget" name="_styleList"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="_langLabel">
+            <property name="styleSheet">
+             <string notr="true">background-color: #FF17365D;
+color: rgb(255, 255, 255);
+padding: 4px 40px 4px 40px;</string>
+            </property>
+            <property name="text">
+             <string>Language</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="_styleLabel">
+            <property name="styleSheet">
+             <string notr="true">background-color: #FF17365D;
+color: rgb(255, 255, 255);
+padding: 4px 40px 4px 40px;</string>
+            </property>
+            <property name="text">
+             <string>Category</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="3">
+           <widget class="Line" name="line_3">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QLabel" name="_userExtLabel">
+            <property name="styleSheet">
+             <string notr="true">background-color: #FF17365D;
+color: rgb(255, 255, 255);
+padding: 4px 40px 4px 40px;</string>
+            </property>
+            <property name="text">
+             <string>User Ext</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="_plusLabel">
+            <property name="text">
+             <string>+</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="_styleGroup">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="_langStyleLabel">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 0, 255);</string>
+            </property>
+            <property name="text">
+             <string>Language : Style</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line_5">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="fontGroup">
+            <property name="styleSheet">
+             <string notr="true">/*
+QGroupBox{font-weight: bold;}
+::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+}
+*/
+QGroupBox::title  {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 4px 8000px 4px 8000px;
+    background-color: #FF17365D;
+    color: rgb(255, 255, 255);
+}</string>
+            </property>
+            <property name="title">
+             <string>Font</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_12">
+             <item>
+              <layout class="QGridLayout" name="gridLayout_6">
+               <item row="1" column="0">
+                <widget class="QLabel" name="_sizeLabel">
+                 <property name="text">
+                  <string>Size</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="_familyLabel">
+                 <property name="text">
+                  <string>Family</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QCheckBox" name="_italicCheck">
+                 <property name="text">
+                  <string>Italic</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QSpinBox" name="_sizeSpin">
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="value">
+                  <number>0</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1" colspan="2">
+                <widget class="QFontComboBox" name="_familyCombo"/>
+               </item>
+               <item row="3" column="2">
+                <widget class="QCheckBox" name="_underCheck">
+                 <property name="text">
+                  <string>Underline</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QCheckBox" name="_boldCheck">
+                 <property name="text">
+                  <string>Bold</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QCheckBox" name="_overCheck">
+                 <property name="text">
+                  <string>Overline</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QCheckBox" name="_strikeCheck">
+                 <property name="text">
+                  <string>Strikethrough</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0" colspan="3">
+                <widget class="Line" name="line_4">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_11">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>2</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="_styleColorsGroup">
+            <property name="styleSheet">
+             <string notr="true">/*
+QGroupBox{font-weight: bold;}
+::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+}
+*/
+QGroupBox::title  {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 4px 8000px 4px 8000px;
+    background-color: #FF17365D;
+    color: rgb(255, 255, 255);
+}</string>
+            </property>
+            <property name="title">
+             <string>Colors</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_13">
+             <item>
+              <layout class="QGridLayout" name="gridLayout_7">
+               <item row="0" column="0">
+                <widget class="QLabel" name="_StyleFgLabel">
+                 <property name="text">
+                  <string>Foreground</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="_styleBgLabel">
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::NoFrame</enum>
+                 </property>
+                 <property name="text">
+                  <string>Background</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="ColorButton" name="_styleFgButton">
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="autoRaise">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="ColorButton" name="_styleBgButton">
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="autoRaise">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_12">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>264</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="_styleDefaultsButton">
+       <property name="text">
+        <string>Defaults</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_7">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ColorButton</class>
+   <extends>QToolButton</extends>
+   <header>color_button.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../../../icons/textedit/textedit_icons.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>texteditLib::PreferencesDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>texteditLib::PreferencesDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

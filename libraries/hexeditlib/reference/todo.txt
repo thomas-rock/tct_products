@@ -1,0 +1,6 @@
+Hex Edit To-do
+--------------
+- Come up with a name a make an app
+- Implement cut/copy/paste
+- Implement find/replace
+- Implement goto address

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/hexedit">
+		<file alias="revert">revert.png</file>
+		<file alias="searchGoto">searchGoto.png</file>
+    </qresource>
+</RCC>

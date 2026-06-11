@@ -1,0 +1,16 @@
+QToolButton {
+   width: 75px;
+   font-weight: normal;
+}
+
+QToolButton:pressed {
+   width: 75px;
+   font-weight: bold;
+   background-color: cyan;
+}
+
+QToolButton:checked {
+   width: 75px;
+   font-weight: bold;
+   background-color: cyan; 
+}

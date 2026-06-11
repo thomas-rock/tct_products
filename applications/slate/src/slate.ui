@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Slate</class>
+ <widget class="QMainWindow" name="Slate">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1158</width>
+    <height>765</height>
+   </rect>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QStackedWidget" name="modeStack"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="modeToolbar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(189, 189, 191);
+</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::ToolBarArea::LeftToolBarArea</set>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="rtfModeAct"/>
+   <addaction name="textModeAct"/>
+   <addaction name="hexModeAct"/>
+   <addaction name="tableModeAct"/>
+   <addaction name="pdfModeAct"/>
+   <addaction name="graphModeAct"/>
+   <addaction name="chartModeAct"/>
+   <addaction name="imageModeAct"/>
+   <addaction name="svgModeAct"/>
+   <addaction name="helpModeAct"/>
+   <addaction name="separator"/>
+   <addaction name="exitAct"/>
+  </widget>
+  <action name="textModeAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/tool_pencil.png</normaloff>:/basic/tool_pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Text</string>
+   </property>
+   <property name="toolTip">
+    <string>Text Edit mode</string>
+   </property>
+  </action>
+  <action name="helpModeAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/help.png</normaloff>:/basic/help.png</iconset>
+   </property>
+   <property name="text">
+    <string>Help</string>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="exitAct">
+   <property name="icon">
+    <iconset resource="../../../icons/custom/custom_icons.qrc">
+     <normaloff>:/custom/exit</normaloff>:/custom/exit</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="toolTip">
+    <string>Exit application</string>
+   </property>
+  </action>
+  <action name="hexModeAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../icons/development/development_icons.qrc">
+     <normaloff>:/development/control-edit.png</normaloff>:/development/control-edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hex</string>
+   </property>
+   <property name="toolTip">
+    <string>Hex Edit mode</string>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="graphModeAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/view_large_icons.png</normaloff>:/basic/view_large_icons.png</iconset>
+   </property>
+   <property name="text">
+    <string>Graph</string>
+   </property>
+   <property name="toolTip">
+    <string>Graph View mode</string>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="rtfModeAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../icons/word_processing/word_processing_icons.qrc">
+     <normaloff>:/wp/document_template-edit.png</normaloff>:/wp/document_template-edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>RTF</string>
+   </property>
+   <property name="toolTip">
+    <string>RTF Editor Mode</string>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="imageModeAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/picture.png</normaloff>:/basic/picture.png</iconset>
+   </property>
+   <property name="text">
+    <string>Image</string>
+   </property>
+   <property name="toolTip">
+    <string>Image Viewer Mode</string>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="pdfModeAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../icons/word_processing/word_processing_icons.qrc">
+     <normaloff>:/wp/import_pdf.png</normaloff>:/wp/import_pdf.png</iconset>
+   </property>
+   <property name="text">
+    <string>PDF</string>
+   </property>
+   <property name="toolTip">
+    <string>PDF Viewer Mode</string>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="svgModeAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../icons/development/development_icons.qrc">
+     <normaloff>:/development/file_image_vector.png</normaloff>:/development/file_image_vector.png</iconset>
+   </property>
+   <property name="text">
+    <string>SVG</string>
+   </property>
+   <property name="toolTip">
+    <string>SVG Viewer Mode</string>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="chartModeAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../icons/word_processing/word_processing_icons.qrc">
+     <normaloff>:/wp/insert_chart.png</normaloff>:/wp/insert_chart.png</iconset>
+   </property>
+   <property name="text">
+    <string>Chart</string>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="tableModeAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../icons/word_processing/word_processing_icons.qrc">
+     <normaloff>:/wp/table-edit.png</normaloff>:/wp/table-edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Table</string>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../../../icons/word_processing/word_processing_icons.qrc"/>
+  <include location="../../../icons/word_processing/word_processing_icons.qrc"/>
+  <include location="../../../icons/basic/basic_icons.qrc"/>
+  <include location="../../../icons/basic/basic_icons.qrc"/>
+  <include location="../../../icons/development/development_icons.qrc"/>
+  <include location="../../../icons/development/development_icons.qrc"/>
+  <include location="../../../icons/custom/custom_icons.qrc"/>
+  <include location="../../../icons/word_processing/word_processing_icons.qrc"/>
+  <include location="../../../icons/word_processing/word_processing_icons.qrc"/>
+  <include location="../../../icons/basic/basic_icons.qrc"/>
+  <include location="../../../icons/basic/basic_icons.qrc"/>
+  <include location="../../../icons/development/development_icons.qrc"/>
+  <include location="../../../icons/development/development_icons.qrc"/>
+  <include location="../../../icons/custom/custom_icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,6 @@
+<RCC>
+   <qresource prefix="/styles">
+      <file>tabWidget.txt</file>
+      <file>modeButton.txt</file>
+   </qresource>
+</RCC>

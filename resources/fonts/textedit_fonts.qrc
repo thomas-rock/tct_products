@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/textedit">
+		<file>SourceCodePro.ttf</file>
+    </qresource>
+</RCC>

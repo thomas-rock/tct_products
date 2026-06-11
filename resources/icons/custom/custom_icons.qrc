@@ -1,0 +1,20 @@
+<RCC>
+   <qresource prefix="/custom">
+      <file alias="caseSensitive">caseSensitive.png</file>
+		<file alias="check">check.png</file>
+		<file alias="clear">clear.png</file>
+		<file alias="closeButton">closeButton.png</file>
+		<file alias="debug">debug.png</file>
+		<file alias="delete">delete.png</file>
+		<file alias="error">error.png</file>
+      <file alias="exit">exit.png</file>
+      <file alias="goto">searchGoto.png</file>
+		<file alias="leftArrow">leftArrow.png</file>
+		<file alias="regex">regex.png</file>
+		<file alias="rightArrow">rightArrow.png</file>
+		<file alias="run">run.png</file>
+		<file alias="run-debug">run-debug.png</file>
+		<file alias="warning">warning.png</file>
+		<file alias="wholeWords">wholeWords.png</file>
+   </qresource>
+</RCC>

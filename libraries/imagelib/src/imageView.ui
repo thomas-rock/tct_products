@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>imageLib::imageView</class>
+ <widget class="QMainWindow" name="imageLib::imageView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="imageLib::viewerTab" name="viewer">
+      <property name="iconSize">
+       <size>
+        <width>8</width>
+        <height>8</height>
+       </size>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
+      <property name="tabBarAutoHide">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="_status" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>4</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>File:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="currentFile">
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 255);</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>507</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="recentFilesMenu">
+     <property name="title">
+      <string>Recent Files</string>
+     </property>
+     <addaction name="actionDummy"/>
+    </widget>
+    <addaction name="openAct"/>
+    <addaction name="closeAct"/>
+    <addaction name="closeAllAct"/>
+    <addaction name="separator"/>
+    <addaction name="recentFilesMenu"/>
+    <addaction name="separator"/>
+    <addaction name="summaryAct"/>
+    <addaction name="printAct"/>
+    <addaction name="separator"/>
+    <addaction name="preferencesAct"/>
+   </widget>
+   <widget class="QMenu" name="viewMenu">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="zoomInAct"/>
+    <addaction name="zoomOutAct"/>
+    <addaction name="zoomFitAct"/>
+    <addaction name="zoom100Act"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="windowMenu">
+    <property name="title">
+     <string>Window</string>
+    </property>
+   </widget>
+   <addaction name="fileMenu"/>
+   <addaction name="viewMenu"/>
+   <addaction name="windowMenu"/>
+  </widget>
+  <widget class="QToolBar" name="fileToolbar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="openAct"/>
+   <addaction name="closeAct"/>
+   <addaction name="closeAllAct"/>
+   <addaction name="separator"/>
+   <addaction name="printAct"/>
+  </widget>
+  <widget class="QToolBar" name="viewToolbar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="zoomInAct"/>
+   <addaction name="zoomOutAct"/>
+   <addaction name="zoomFitAct"/>
+   <addaction name="zoom100Act"/>
+   <addaction name="separator"/>
+  </widget>
+  <action name="openAct">
+   <property name="icon">
+    <iconset resource="../../icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/open.png</normaloff>:/basic/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>File Open</string>
+   </property>
+   <property name="toolTip">
+    <string>Open a file for viewing</string>
+   </property>
+  </action>
+  <action name="closeAct">
+   <property name="icon">
+    <iconset resource="../../icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/close.png</normaloff>:/basic/close.png</iconset>
+   </property>
+   <property name="text">
+    <string>File Close</string>
+   </property>
+   <property name="toolTip">
+    <string>Close the current file view</string>
+   </property>
+  </action>
+  <action name="printAct">
+   <property name="icon">
+    <iconset resource="../../icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/print.png</normaloff>:/basic/print.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print</string>
+   </property>
+   <property name="toolTip">
+    <string>Print the current view</string>
+   </property>
+  </action>
+  <action name="zoomInAct">
+   <property name="icon">
+    <iconset resource="../../icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/zoom_in.png</normaloff>:/basic/zoom_in.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom In</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom in current view</string>
+   </property>
+  </action>
+  <action name="zoomOutAct">
+   <property name="icon">
+    <iconset resource="../../icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/zoom_out.png</normaloff>:/basic/zoom_out.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom Out</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom out current view</string>
+   </property>
+  </action>
+  <action name="zoomFitAct">
+   <property name="icon">
+    <iconset resource="../../icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/zoom_out.png</normaloff>:/basic/zoom_out.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom Fit</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom current view to show all contents</string>
+   </property>
+  </action>
+  <action name="zoom100Act">
+   <property name="icon">
+    <iconset resource="../../icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/zoom_out.png</normaloff>:/basic/zoom_out.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom 100</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom to 100% </string>
+   </property>
+  </action>
+  <action name="closeAllAct">
+   <property name="icon">
+    <iconset resource="../../icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/close_all.png</normaloff>:/basic/close_all.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close All</string>
+   </property>
+   <property name="toolTip">
+    <string>Close all open viewers</string>
+   </property>
+  </action>
+  <action name="actionDummy">
+   <property name="text">
+    <string>Dummy</string>
+   </property>
+  </action>
+  <action name="summaryAct">
+   <property name="text">
+    <string>Summary...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="preferencesAct">
+   <property name="icon">
+    <iconset resource="../../icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/gear.png</normaloff>:/basic/gear.png</iconset>
+   </property>
+   <property name="text">
+    <string>Preferences...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>imageLib::viewerTab</class>
+   <extends>QTabWidget</extends>
+   <header>viewerTab.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../icons/basic/basic_icons.qrc"/>
+  <include location="../../icons/basic/basic_icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>

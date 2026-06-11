@@ -1,0 +1,12 @@
+#ifndef RTFEDITLIB_GLOBAL_H
+#define RTFEDITLIB_GLOBAL_H
+
+#include <QtCore/QtGlobal>
+
+#if defined (RTFEDITLIB_LIBRARY)
+   #define RTFEDITLIB_EXPORT Q_DECL_EXPORT
+#else
+   #define RTFEDITLIB_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // RTFEDITLIB_GLOBAL_H

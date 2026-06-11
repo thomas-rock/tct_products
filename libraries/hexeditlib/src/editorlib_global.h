@@ -1,0 +1,12 @@
+#ifndef HEXEDITLIB_GLOBAL_H
+#define HEXEDITLIB_GLOBAL_H
+
+#include <QtCore/QtGlobal>
+
+#if defined (HEXEDITLIB_LIBRARY)
+   #define HEXEDITLIB_EXPORT Q_DECL_EXPORT
+#else
+   #define HEXEDITLIB_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // HEXEDITLIB_GLOBAL_H

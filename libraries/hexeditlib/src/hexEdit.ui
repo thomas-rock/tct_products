@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>hexeditLib::hexEdit</class>
+ <widget class="QMainWindow" name="hexeditLib::hexEdit">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="_editContainer">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="hexeditLib::editorTab" name="editor">
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="findReplacePanel" name="_findReplacePanel" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="status" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>4</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>File:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="filenameLabel">
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 255);</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>129</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Address:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="addressLabel">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Panel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Size:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="sizeLabel">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Panel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Mode:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="modeLabel">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Panel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="recentFilesMenu">
+     <property name="title">
+      <string>Recent Files</string>
+     </property>
+     <addaction name="actionDummy"/>
+    </widget>
+    <addaction name="newAct"/>
+    <addaction name="openAct"/>
+    <addaction name="reloadAct"/>
+    <addaction name="separator"/>
+    <addaction name="saveAct"/>
+    <addaction name="saveAsAct"/>
+    <addaction name="saveAllAct"/>
+    <addaction name="closeAct"/>
+    <addaction name="closeAllAct"/>
+    <addaction name="separator"/>
+    <addaction name="summaryAct"/>
+    <addaction name="printAct"/>
+    <addaction name="separator"/>
+    <addaction name="recentFilesMenu"/>
+    <addaction name="exitAct"/>
+   </widget>
+   <widget class="QMenu" name="_editMenu">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="undoAct"/>
+    <addaction name="redoAct"/>
+    <addaction name="separator"/>
+    <addaction name="cutAct"/>
+    <addaction name="copyAct"/>
+    <addaction name="pasteAct"/>
+    <addaction name="deleteAct"/>
+    <addaction name="separator"/>
+    <addaction name="preferencesAct"/>
+   </widget>
+   <widget class="QMenu" name="searchMenu">
+    <property name="title">
+     <string>Search</string>
+    </property>
+    <addaction name="findReplace2Act"/>
+    <addaction name="separator"/>
+    <addaction name="gotoAct"/>
+   </widget>
+   <widget class="QMenu" name="windowMenu">
+    <property name="title">
+     <string>Window</string>
+    </property>
+   </widget>
+   <addaction name="fileMenu"/>
+   <addaction name="_editMenu"/>
+   <addaction name="searchMenu"/>
+   <addaction name="windowMenu"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="newAct"/>
+   <addaction name="openAct"/>
+   <addaction name="saveAct"/>
+   <addaction name="saveAllAct"/>
+   <addaction name="closeAct"/>
+   <addaction name="closeAllAct"/>
+   <addaction name="printAct"/>
+   <addaction name="separator"/>
+   <addaction name="cutAct"/>
+   <addaction name="copyAct"/>
+   <addaction name="pasteAct"/>
+   <addaction name="separator"/>
+   <addaction name="undoAct"/>
+   <addaction name="redoAct"/>
+   <addaction name="separator"/>
+   <addaction name="gotoAct"/>
+  </widget>
+  <action name="newAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/document_flat-new.png</normaloff>:/basic/document_flat-new.png</iconset>
+   </property>
+   <property name="text">
+    <string>New</string>
+   </property>
+   <property name="toolTip">
+    <string>Create new binary file</string>
+   </property>
+  </action>
+  <action name="closeAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/close.png</normaloff>:/basic/close.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="toolTip">
+    <string>Close current file</string>
+   </property>
+  </action>
+  <action name="saveAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/save.png</normaloff>:/basic/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save current file</string>
+   </property>
+  </action>
+  <action name="closeAllAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/close_all.png</normaloff>:/basic/close_all.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close All</string>
+   </property>
+   <property name="toolTip">
+    <string>Close all files</string>
+   </property>
+  </action>
+  <action name="saveAsAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/save_as.png</normaloff>:/basic/save_as.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save As...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save file with a different name</string>
+   </property>
+  </action>
+  <action name="printAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/print.png</normaloff>:/basic/print.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print</string>
+   </property>
+   <property name="toolTip">
+    <string>Print current file</string>
+   </property>
+  </action>
+  <action name="undoAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/undo.png</normaloff>:/basic/undo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="toolTip">
+    <string>Undo previous edit action</string>
+   </property>
+  </action>
+  <action name="redoAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/redo.png</normaloff>:/basic/redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="toolTip">
+    <string>Redo previous edit action</string>
+   </property>
+  </action>
+  <action name="cutAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/clip_cut.png</normaloff>:/basic/clip_cut.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="toolTip">
+    <string>Cut selected data to the clipboard</string>
+   </property>
+  </action>
+  <action name="copyAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/clip_copy.png</normaloff>:/basic/clip_copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy selected data to the clipboard</string>
+   </property>
+  </action>
+  <action name="pasteAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/clip_paste.png</normaloff>:/basic/clip_paste.png</iconset>
+   </property>
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="toolTip">
+    <string>Paste data from the clipboard  into the file</string>
+   </property>
+  </action>
+  <action name="deleteAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/delete.png</normaloff>:/basic/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Deleted selected data</string>
+   </property>
+  </action>
+  <action name="findReplaceAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/hexedit/searchFind</normaloff>:/hexedit/searchFind</iconset>
+   </property>
+   <property name="text">
+    <string>Find/Replace</string>
+   </property>
+  </action>
+  <action name="gotoAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/custom/goto</normaloff>:/custom/goto</iconset>
+   </property>
+   <property name="text">
+    <string>Goto Address</string>
+   </property>
+  </action>
+  <action name="reloadAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/reload_rotate.png</normaloff>:/basic/reload_rotate.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reload from Disk</string>
+   </property>
+   <property name="toolTip">
+    <string>Lose changes and reload from disk</string>
+   </property>
+  </action>
+  <action name="openAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/folder_open-edit.png</normaloff>:/basic/folder_open-edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open file for editing</string>
+   </property>
+  </action>
+  <action name="summaryAct">
+   <property name="text">
+    <string>Summary...</string>
+   </property>
+  </action>
+  <action name="findReplace2Act">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/editor/searchFind</normaloff>:/editor/searchFind</iconset>
+   </property>
+   <property name="text">
+    <string>Find/Replace</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="saveAllAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/save_all.png</normaloff>:/basic/save_all.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save All</string>
+   </property>
+   <property name="toolTip">
+    <string>Save All modified files</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="exitAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/custom/exit</normaloff>:/custom/exit</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="toolTip">
+    <string>Close application</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionDummy">
+   <property name="text">
+    <string>Dummy</string>
+   </property>
+  </action>
+  <action name="preferencesAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/basic/options.png</normaloff>:/basic/options.png</iconset>
+   </property>
+   <property name="text">
+    <string>Preferences...</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>findReplacePanel</class>
+   <extends>QWidget</extends>
+   <header>findReplacePanel.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>hexeditLib::editorTab</class>
+   <extends>QTabWidget</extends>
+   <header>editorTab.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

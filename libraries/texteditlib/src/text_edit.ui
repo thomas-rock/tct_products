@@ -1,0 +1,936 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>texteditLib::TextEdit</class>
+ <widget class="QMainWindow" name="texteditLib::TextEdit">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <widget class="QWidget" name="layoutWidget">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="texteditLib::EditorTab" name="editor">
+          <property name="contextMenuPolicy">
+           <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="commonLib::FindReplacePanel" name="findReplace" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QGroupBox" name="transcriptGroup">
+       <property name="styleSheet">
+        <string notr="true">QGroupBox::title  {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 4px 8000px 4px 8000px;
+    background-color: #FF17365D;
+    color: rgb(255, 255, 255);
+}</string>
+       </property>
+       <property name="title">
+        <string>Editor Transcript</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignCenter</set>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>7</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="commonLib::Transcript" name="transcript"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="recentFilesMenu">
+     <property name="title">
+      <string>Recent Files</string>
+     </property>
+     <addaction name="actionDummy"/>
+    </widget>
+    <addaction name="newAct"/>
+    <addaction name="openAct"/>
+    <addaction name="reloadAct"/>
+    <addaction name="separator"/>
+    <addaction name="saveAct"/>
+    <addaction name="saveAsAct"/>
+    <addaction name="saveAllAct"/>
+    <addaction name="closeAct"/>
+    <addaction name="closeAllAct"/>
+    <addaction name="separator"/>
+    <addaction name="summaryAct"/>
+    <addaction name="printAct"/>
+    <addaction name="separator"/>
+    <addaction name="recentFilesMenu"/>
+    <addaction name="exitAct"/>
+   </widget>
+   <widget class="QMenu" name="editMenu">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <widget class="QMenu" name="selectMenu">
+     <property name="title">
+      <string>Select</string>
+     </property>
+     <addaction name="selectWordAct"/>
+     <addaction name="selectLineAct"/>
+     <addaction name="selectMatchAct"/>
+     <addaction name="selectAllAct"/>
+    </widget>
+    <widget class="QMenu" name="changeCaseMenu">
+     <property name="title">
+      <string>Change Case</string>
+     </property>
+     <addaction name="uppercaseAct"/>
+     <addaction name="lowercaseAct"/>
+     <addaction name="capitalizeAct"/>
+     <addaction name="changeCaseAct"/>
+    </widget>
+    <widget class="QMenu" name="lienFormatMenu">
+     <property name="title">
+      <string>End-of-Line Format</string>
+     </property>
+     <addaction name="windowsEolAct"/>
+     <addaction name="unixEolAct"/>
+     <addaction name="macEolAct"/>
+    </widget>
+    <widget class="QMenu" name="menuWhitespace_Operation">
+     <property name="title">
+      <string>Whitespace Operation</string>
+     </property>
+     <addaction name="trimLeadingAct"/>
+     <addaction name="trimTrailingAct"/>
+     <addaction name="trimLeadingTrailingAct"/>
+     <addaction name="separator"/>
+     <addaction name="tabs2SpacesAct"/>
+     <addaction name="spaces2TabsAct"/>
+    </widget>
+    <widget class="QMenu" name="clipboardMenu">
+     <property name="title">
+      <string>Copy to Clipboard</string>
+     </property>
+     <addaction name="fullPathnameAct"/>
+     <addaction name="filenameAct"/>
+     <addaction name="pathnameAct"/>
+     <addaction name="separator"/>
+     <addaction name="allFullPathnamesAct"/>
+     <addaction name="allFilenamesAct"/>
+     <addaction name="allPathnamesAct"/>
+    </widget>
+    <addaction name="undoAct"/>
+    <addaction name="redoAct"/>
+    <addaction name="separator"/>
+    <addaction name="cutAct"/>
+    <addaction name="copyAct"/>
+    <addaction name="pasteAct"/>
+    <addaction name="deleteAct"/>
+    <addaction name="selectMenu"/>
+    <addaction name="separator"/>
+    <addaction name="indentAct"/>
+    <addaction name="unindentAct"/>
+    <addaction name="separator"/>
+    <addaction name="changeCaseMenu"/>
+    <addaction name="separator"/>
+    <addaction name="commentAct"/>
+    <addaction name="uncommentAct"/>
+    <addaction name="lienFormatMenu"/>
+    <addaction name="separator"/>
+    <addaction name="menuWhitespace_Operation"/>
+    <addaction name="separator"/>
+    <addaction name="readOnlyAct"/>
+    <addaction name="clearReadOnlyAct"/>
+    <addaction name="separator"/>
+    <addaction name="clipboardMenu"/>
+    <addaction name="separator"/>
+    <addaction name="preferencesAct"/>
+   </widget>
+   <widget class="QMenu" name="searchMenu">
+    <property name="title">
+     <string>Search</string>
+    </property>
+    <addaction name="findReplaceAct"/>
+    <addaction name="separator"/>
+    <addaction name="gotoAct"/>
+    <addaction name="gotoMatchAct"/>
+    <addaction name="separator"/>
+    <addaction name="nextMarkerAct"/>
+    <addaction name="prevMarkerAct"/>
+    <addaction name="clearMarkersAct"/>
+   </widget>
+   <widget class="QMenu" name="windowMenu">
+    <property name="title">
+     <string>Window</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="viewMenu">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="lineNumbersAct"/>
+    <addaction name="markersAct"/>
+    <addaction name="changeBarsAct"/>
+    <addaction name="indentationGuidesAct"/>
+    <addaction name="whitespaceAct"/>
+    <addaction name="endOfLinesAct"/>
+    <addaction name="currentLineHighlightAct"/>
+    <addaction name="matchingBracesAct"/>
+    <addaction name="separator"/>
+    <addaction name="showTranscriptAct"/>
+   </widget>
+   <widget class="QMenu" name="languageMenu">
+    <property name="title">
+     <string>Language</string>
+    </property>
+   </widget>
+   <addaction name="fileMenu"/>
+   <addaction name="editMenu"/>
+   <addaction name="searchMenu"/>
+   <addaction name="viewMenu"/>
+   <addaction name="languageMenu"/>
+   <addaction name="windowMenu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="newAct"/>
+   <addaction name="openAct"/>
+   <addaction name="saveAct"/>
+   <addaction name="saveAllAct"/>
+   <addaction name="closeAct"/>
+   <addaction name="closeAllAct"/>
+   <addaction name="printAct"/>
+   <addaction name="separator"/>
+   <addaction name="cutAct"/>
+   <addaction name="copyAct"/>
+   <addaction name="pasteAct"/>
+   <addaction name="separator"/>
+   <addaction name="undoAct"/>
+   <addaction name="redoAct"/>
+   <addaction name="separator"/>
+  </widget>
+  <action name="newAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/document-new.png</normaloff>:/basic/document-new.png</iconset>
+   </property>
+   <property name="text">
+    <string>New</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="openAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/folder_open-edit.png</normaloff>:/basic/folder_open-edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="reloadAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/reload_rotate.png</normaloff>:/basic/reload_rotate.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reload from Disk</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="saveAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/save.png</normaloff>:/basic/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="saveAsAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/save_as.png</normaloff>:/basic/save_as.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save As...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save As</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+S</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="saveAllAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/save_all.png</normaloff>:/basic/save_all.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save All</string>
+   </property>
+   <property name="toolTip">
+    <string>Save All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="closeAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/close.png</normaloff>:/basic/close.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="toolTip">
+    <string>Closee</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="closeAllAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/close_all.png</normaloff>:/basic/close_all.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close All</string>
+   </property>
+   <property name="toolTip">
+    <string>Close All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+W</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="printAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/print.png</normaloff>:/basic/print.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print</string>
+   </property>
+   <property name="toolTip">
+    <string>Print</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="exitAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/custom/custom_icons.qrc">
+     <normaloff>:/custom/exit</normaloff>:/custom/exit</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="toolTip">
+    <string>Exit</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="undoAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/undo.png</normaloff>:/basic/undo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="toolTip">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="redoAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/redo.png</normaloff>:/basic/redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="toolTip">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Z</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="cutAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/clip_cut.png</normaloff>:/basic/clip_cut.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="toolTip">
+    <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="copyAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/clip_copy.png</normaloff>:/basic/clip_copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="pasteAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/clip_paste.png</normaloff>:/basic/clip_paste.png</iconset>
+   </property>
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="toolTip">
+    <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="deleteAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/custom/custom_icons.qrc">
+     <normaloff>:/custom/delete</normaloff>:/custom/delete</iconset>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="preferencesAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/options.png</normaloff>:/basic/options.png</iconset>
+   </property>
+   <property name="text">
+    <string>Preferences...</string>
+   </property>
+   <property name="toolTip">
+    <string>Preferences</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="selectWordAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/selectWord</normaloff>:/textedit/selectWord</iconset>
+   </property>
+   <property name="text">
+    <string>Select Word</string>
+   </property>
+  </action>
+  <action name="selectLineAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/selectLine</normaloff>:/textedit/selectLine</iconset>
+   </property>
+   <property name="text">
+    <string>Select Line</string>
+   </property>
+  </action>
+  <action name="selectMatchAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/selectBrace</normaloff>:/textedit/selectBrace</iconset>
+   </property>
+   <property name="text">
+    <string>Select to Matching Brace</string>
+   </property>
+  </action>
+  <action name="selectAllAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/selectAll</normaloff>:/textedit/selectAll</iconset>
+   </property>
+   <property name="text">
+    <string>Select All</string>
+   </property>
+  </action>
+  <action name="indentAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/indent</normaloff>:/textedit/indent</iconset>
+   </property>
+   <property name="text">
+    <string>Indent</string>
+   </property>
+  </action>
+  <action name="unindentAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/outdent</normaloff>:/textedit/outdent</iconset>
+   </property>
+   <property name="text">
+    <string>Unindent</string>
+   </property>
+   <property name="toolTip">
+    <string>Unindent</string>
+   </property>
+  </action>
+  <action name="uppercaseAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/uppercase</normaloff>:/textedit/uppercase</iconset>
+   </property>
+   <property name="text">
+    <string>Uppercase</string>
+   </property>
+  </action>
+  <action name="lowercaseAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/lowercase</normaloff>:/textedit/lowercase</iconset>
+   </property>
+   <property name="text">
+    <string>Lowercase</string>
+   </property>
+  </action>
+  <action name="capitalizeAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/capitalize</normaloff>:/textedit/capitalize</iconset>
+   </property>
+   <property name="text">
+    <string>Capitalize</string>
+   </property>
+  </action>
+  <action name="changeCaseAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/changeCase</normaloff>:/textedit/changeCase</iconset>
+   </property>
+   <property name="text">
+    <string>Change Case</string>
+   </property>
+  </action>
+  <action name="commentAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/comment</normaloff>:/textedit/comment</iconset>
+   </property>
+   <property name="text">
+    <string>Comment</string>
+   </property>
+  </action>
+  <action name="uncommentAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/uncomment</normaloff>:/textedit/uncomment</iconset>
+   </property>
+   <property name="text">
+    <string>Uncomment</string>
+   </property>
+  </action>
+  <action name="windowsEolAct">
+   <property name="text">
+    <string>Windows</string>
+   </property>
+  </action>
+  <action name="unixEolAct">
+   <property name="text">
+    <string>UNIX</string>
+   </property>
+  </action>
+  <action name="macEolAct">
+   <property name="text">
+    <string>Mac</string>
+   </property>
+  </action>
+  <action name="trimLeadingAct">
+   <property name="text">
+    <string>Trim Leading Spaces</string>
+   </property>
+  </action>
+  <action name="trimTrailingAct">
+   <property name="text">
+    <string>Trim Trailing Spaces</string>
+   </property>
+  </action>
+  <action name="trimLeadingTrailingAct">
+   <property name="text">
+    <string>Trim Leading/Trailing Spaces</string>
+   </property>
+  </action>
+  <action name="tabs2SpacesAct">
+   <property name="text">
+    <string>Convert Tabs to Spaces</string>
+   </property>
+  </action>
+  <action name="spaces2TabsAct">
+   <property name="text">
+    <string>Convert Spaces to Tabs</string>
+   </property>
+  </action>
+  <action name="readOnlyAct">
+   <property name="text">
+    <string>Set Read-Only</string>
+   </property>
+  </action>
+  <action name="clearReadOnlyAct">
+   <property name="text">
+    <string>Clear Read-Only</string>
+   </property>
+  </action>
+  <action name="fullPathnameAct">
+   <property name="text">
+    <string>Current Full Pathname</string>
+   </property>
+  </action>
+  <action name="filenameAct">
+   <property name="text">
+    <string>Current Filename</string>
+   </property>
+  </action>
+  <action name="pathnameAct">
+   <property name="text">
+    <string>Current Pathname</string>
+   </property>
+  </action>
+  <action name="allFullPathnamesAct">
+   <property name="text">
+    <string>All Full Pathnames</string>
+   </property>
+  </action>
+  <action name="allFilenamesAct">
+   <property name="text">
+    <string>All Filenames</string>
+   </property>
+  </action>
+  <action name="allPathnamesAct">
+   <property name="text">
+    <string>All Pathnames</string>
+   </property>
+  </action>
+  <action name="findReplaceAct">
+   <property name="text">
+    <string>Find/Replace</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="gotoAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/custom/custom_icons.qrc">
+     <normaloff>:/custom/goto</normaloff>:/custom/goto</iconset>
+   </property>
+   <property name="text">
+    <string>Go To....</string>
+   </property>
+  </action>
+  <action name="gotoMatchAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/searchMatching</normaloff>:/textedit/searchMatching</iconset>
+   </property>
+   <property name="text">
+    <string>Go To Match</string>
+   </property>
+  </action>
+  <action name="nextMarkerAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/nextMarker</normaloff>:/textedit/nextMarker</iconset>
+   </property>
+   <property name="text">
+    <string>Next Marker</string>
+   </property>
+  </action>
+  <action name="prevMarkerAct">
+   <property name="icon">
+    <iconset resource="../icons/textedit_icons.qrc">
+     <normaloff>:/textedit/prevMarker</normaloff>:/textedit/prevMarker</iconset>
+   </property>
+   <property name="text">
+    <string>Previous Marker</string>
+   </property>
+  </action>
+  <action name="clearMarkersAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/custom/custom_icons.qrc">
+     <normaloff>:/custom/clear</normaloff>:/custom/clear</iconset>
+   </property>
+   <property name="text">
+    <string>Clear Markers</string>
+   </property>
+  </action>
+  <action name="lineNumbersAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Line Numbers</string>
+   </property>
+  </action>
+  <action name="markersAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Markers</string>
+   </property>
+  </action>
+  <action name="changeBarsAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Change Bars</string>
+   </property>
+  </action>
+  <action name="indentationGuidesAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Indentation Guides</string>
+   </property>
+  </action>
+  <action name="whitespaceAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Whitespace</string>
+   </property>
+  </action>
+  <action name="endOfLinesAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>End-of-Lines</string>
+   </property>
+  </action>
+  <action name="currentLineHighlightAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Current Line Highlight</string>
+   </property>
+  </action>
+  <action name="matchingBracesAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Matching Braces</string>
+   </property>
+  </action>
+  <action name="actionDummy">
+   <property name="text">
+    <string>Dummy</string>
+   </property>
+  </action>
+  <action name="summaryAct">
+   <property name="text">
+    <string>Summary...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="showTranscriptAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Editor Transcript</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>commonLib::Transcript</class>
+   <extends>QTextEdit</extends>
+   <header>transcript.h</header>
+  </customwidget>
+  <customwidget>
+   <class>texteditLib::EditorTab</class>
+   <extends>QTabWidget</extends>
+   <header>editor_tab.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>commonLib::FindReplacePanel</class>
+   <extends>QWidget</extends>
+   <header>find_replace_panel.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../../resources/icons/custom/custom_icons.qrc"/>
+  <include location="../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../icons/textedit_icons.qrc"/>
+  <include location="../../../resources/icons/custom/custom_icons.qrc"/>
+  <include location="../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../../../resources/icons/basic/basic_icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>

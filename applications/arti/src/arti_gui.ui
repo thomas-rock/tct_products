@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ArtiGui</class>
+ <widget class="QMainWindow" name="ArtiGui">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1158</width>
+    <height>765</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Arti Artifact Generator</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../icons/arti.qrc">
+    <normaloff>:/arti/arti</normaloff>:/arti/arti</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QStackedWidget" name="modeStack"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="modeToolbar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(189, 189, 191);
+</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::ToolBarArea::LeftToolBarArea</set>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="mainModeAct"/>
+   <addaction name="textModeAct"/>
+   <addaction name="helpModeAct"/>
+   <addaction name="runAct"/>
+   <addaction name="checkAct"/>
+   <addaction name="separator"/>
+   <addaction name="exitAct"/>
+  </widget>
+  <action name="runAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/custom/custom_icons.qrc">
+     <normaloff>:/custom/run</normaloff>:/custom/run</iconset>
+   </property>
+   <property name="text">
+    <string>Run</string>
+   </property>
+  </action>
+  <action name="helpModeAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/help.png</normaloff>:/basic/help.png</iconset>
+   </property>
+   <property name="text">
+    <string>Help</string>
+   </property>
+  </action>
+  <action name="mainModeAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/options.png</normaloff>:/basic/options.png</iconset>
+   </property>
+   <property name="text">
+    <string>Main Mode</string>
+   </property>
+   <property name="toolTip">
+    <string>Main Mode</string>
+   </property>
+  </action>
+  <action name="exitAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/custom/custom_icons.qrc">
+     <normaloff>:/custom/exit</normaloff>:/custom/exit</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="toolTip">
+    <string>Exit application</string>
+   </property>
+  </action>
+  <action name="textModeAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/tool_pencil.png</normaloff>:/basic/tool_pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Text Edit</string>
+   </property>
+   <property name="toolTip">
+    <string>Text Edit Mode</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
+   </property>
+  </action>
+  <action name="checkAct">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/custom/custom_icons.qrc">
+     <normaloff>:/custom/check</normaloff>:/custom/check</iconset>
+   </property>
+   <property name="text">
+    <string>Check</string>
+   </property>
+   <property name="toolTip">
+    <string>Perform syntax check of current file</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../../../resources/icons/custom/custom_icons.qrc"/>
+  <include location="../icons/arti.qrc"/>
+  <include location="../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../../../resources/icons/custom/custom_icons.qrc"/>
+  <include location="../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../../../resources/icons/custom/custom_icons.qrc"/>
+  <include location="../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../../../resources/icons/basic/basic_icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>

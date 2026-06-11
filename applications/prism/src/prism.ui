@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>prism</class>
+ <widget class="QMainWindow" name="prism">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>959</width>
+    <height>678</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Prism Waveform Explorer</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QTabWidget" name="m_waveformTab">
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>959</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="m_open"/>
+    <addaction name="m_close"/>
+    <addaction name="separator"/>
+    <addaction name="m_save_format"/>
+    <addaction name="m_load_format"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="m_zoom_in"/>
+    <addaction name="m_zoom_out"/>
+    <addaction name="m_zoom_fit"/>
+    <addaction name="m_zoom_cursors"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuView"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="m_open"/>
+   <addaction name="m_close"/>
+   <addaction name="separator"/>
+   <addaction name="m_zoom_in"/>
+   <addaction name="m_zoom_out"/>
+   <addaction name="m_zoom_fit"/>
+   <addaction name="m_zoom_cursors"/>
+  </widget>
+  <action name="m_open">
+   <property name="text">
+    <string>Open...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open a waveform data file</string>
+   </property>
+  </action>
+  <action name="m_close">
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="toolTip">
+    <string>Close current waveform display</string>
+   </property>
+  </action>
+  <action name="m_save_format">
+   <property name="text">
+    <string>Save Format...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save waveform display format</string>
+   </property>
+  </action>
+  <action name="m_load_format">
+   <property name="text">
+    <string>Load Format...</string>
+   </property>
+   <property name="toolTip">
+    <string>Load waveform display format</string>
+   </property>
+  </action>
+  <action name="m_zoom_in">
+   <property name="text">
+    <string>Zoom In</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom in</string>
+   </property>
+  </action>
+  <action name="m_zoom_out">
+   <property name="text">
+    <string>Zoom Out</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom out</string>
+   </property>
+  </action>
+  <action name="m_zoom_fit">
+   <property name="text">
+    <string>Zoom Fit</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom fit</string>
+   </property>
+  </action>
+  <action name="m_zoom_cursors">
+   <property name="text">
+    <string>Zoom Cursors</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom cursors</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

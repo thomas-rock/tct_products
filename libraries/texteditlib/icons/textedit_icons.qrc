@@ -1,0 +1,92 @@
+<RCC>
+    <qresource prefix="/textedit">
+		<file alias="capitalize">capitalize.png</file>
+		<file alias="changeCase">changeCase.png</file>
+		<file alias="comment">comment.png</file>
+		<file alias="greenCircle">greenCircle.png</file>
+		<file alias="greenFlag">greenFlag.png</file>
+		<file alias="indent">indent.png</file>
+		<file alias="lowercase">lowercase.png</file>
+		<file alias="macroRun">macroRun.png</file>
+		<file alias="macroStart">macroStart.png</file>
+		<file alias="macroStop">macroStop.png</file>
+		<file alias="nextMarker">nextMarker.png</file>
+		<file alias="outdent">outdent.png</file>
+		<file alias="previousMarker">previousMarker.png</file>
+		<file alias="prevMarker">prevMarker.png</file>
+		<file alias="redCircle">redCircle.png</file>
+		<file alias="redFlag">redFlag.png</file>
+		<file alias="searchFind">searchFind.png</file>
+		<file alias="searchMatching">searchMatching.png</file>
+		<file alias="selectAll">selectAll.png</file>
+		<file alias="selectBrace">selectBrace.png</file>
+		<file alias="selectLine">selectLine.png</file>
+		<file alias="selectWord">selectWord.png</file>
+		<file alias="textCapitalize">textCapitalize.png</file>
+		<file alias="uncomment">uncomment.png</file>
+		<file alias="uppercase">uppercase.png</file>
+		<file alias="whiteFlag">whiteFlag.png</file>
+		<file alias="yellowCircle">yellowCircle.png</file>
+		<file alias="yellowFlag">yellowFlag.png</file>
+   </qresource>
+</RCC>
+         
+                     
+                     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
