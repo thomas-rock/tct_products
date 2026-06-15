@@ -73,7 +73,9 @@ HEADERS += \
    widgets/find_replace_panel/find_replace_panel.h \
    widgets/include_path/include_path.h \
    widgets/line_edit/line_edit.h \
-   widgets/transcript/transcript.h \
+   widgets/transcript/transcript_base.h \
+   widgets/transcript/list_transcript.h \
+   widgets/transcript/text_transcript.h \
    widgets/tree_widget/tree_widget.h \
    utility/command_line_parser.h \
    utility/message.h \
@@ -89,7 +91,9 @@ SOURCES += \
    widgets/find_replace_panel/find_replace_panel.cpp \
    widgets/include_path/include_path.cpp \
    widgets/line_edit/line_edit.cpp \
-   widgets/transcript/transcript.cpp \
+   widgets/transcript/transcript_base.cpp \
+   widgets/transcript/list_transcript.cpp \
+   widgets/transcript/text_transcript.cpp \
    widgets/tree_widget/tree_widget.cpp \
    utility/command_line_parser.cpp \
    utility/message.cpp \

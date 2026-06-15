@@ -943,7 +943,7 @@ void Parser::do_primary ()
 void Parser::do_op ()
 {
    if (m_opStack.size() == 0 || m_nodeStack.size() == 0) {
-      MESSAGE(SysError, QString("Stack underflow error at line: %0d, col: %0d").arg(next_lex().line).arg(next_lex().col));
+      MESSAGE(SysError, tr("Stack underflow error"), m_artiData->filename, next_lex().line, next_lex().col);
       m_status = false;
       return;
    }
@@ -1502,7 +1502,7 @@ void Parser::syntax_error (QStringList exp)
    if (exp.size())
       expected = QString("Expected: %1").arg(exp.join(", "));
 
-   MESSAGE(SysError, QString("Unexpected token '%1' (%2). %3").arg(token_name(next_lex().token)).arg(next_lex().token).arg(expected), m_templateNode->text, next_lex().line, next_lex().col);
+   MESSAGE(SysError, tr("Unexpected token '%1' (%2). %3").arg(token_name(next_lex().token)).arg(next_lex().token).arg(expected), m_artiData->filename, next_lex().line, next_lex().col);
    m_status = false;
 }
 

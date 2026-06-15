@@ -153,7 +153,12 @@ void TextEdit::setup ()
    connect(m_ui->editor,                 SIGNAL(selectedCount(int)),          this,                SLOT(selectedCount()));
    connect(m_ui->editor,                 &EditorTab::textChanged,             this,                &TextEdit::textChanged);
    connect(m_ui->editor,                 &EditorTab::contextMenuRequest,      this,                &TextEdit::contextMenu);
-   connect(m_ui->editor,                 &EditorTab::message,                 m_ui->transcript,    &commonLib::Transcript::addMessage);
+   connect(m_ui->editor,                 SIGNAL(message(MessageType,QString,QString,int,int)),
+           m_ui->transcript,             SLOT(addMessage(MessageType,QString,QString,int,int)));
+   connect(m_ui->editor,                 SIGNAL(message(MessageType,QString)),
+           m_ui->transcript,             SLOT(addMessage(MessageType,QString)));
+   connect(m_ui->transcript,             &commonLib::ListTranscript::positionRequest,
+           m_ui->editor,                 &EditorTab::edit);
    connect(m_ui->showTranscriptAct,      &QAction::triggered,                 m_ui->transcriptGroup, &QGroupBox::setVisible);
 
    connect(m_ui->fileMenu,               SIGNAL(aboutToShow()),       this,          SLOT(updateFileMenu()));

@@ -1,18 +1,20 @@
 #pragma once
 
 #include "commonlib_global.h"
+#include "transcript_base.h"
 #include <QTextEdit>
 
 namespace commonLib
 {
-   class COMMONLIB_EXPORT Transcript : public QTextEdit
+   class COMMONLIB_EXPORT TextTranscript : public QTextEdit, public TranscriptBase
    {
       Q_OBJECT
 
       public:
-                     Transcript (QWidget* parent = nullptr);
+                     TextTranscript (QWidget* parent = nullptr);
 
       public Q_SLOTS:
-         void        addMessage (int type, const QString& msg);
+         void        addMessage (MessageType type, const QString& msg);
+         void        addMessage (MessageType type, const QString& msg, const QString& file, int line, int col);
    };
 }

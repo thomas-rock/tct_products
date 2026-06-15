@@ -61,7 +61,7 @@
         <string>Add</string>
        </property>
        <property name="icon">
-        <iconset resource="../../../../../icons/basic/basic_icons.qrc">
+        <iconset resource="../../../../../resources/icons/basic/basic_icons.qrc">
          <normaloff>:/basic/add.png</normaloff>:/basic/add.png</iconset>
        </property>
        <property name="iconSize">
@@ -78,7 +78,7 @@
         <string>Remove</string>
        </property>
        <property name="icon">
-        <iconset resource="../../../../../icons/basic/basic_icons.qrc">
+        <iconset resource="../../../../../resources/icons/basic/basic_icons.qrc">
          <normaloff>:/basic/remove.png</normaloff>:/basic/remove.png</iconset>
        </property>
        <property name="iconSize">
@@ -107,8 +107,10 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../../../icons/basic/basic_icons.qrc"/>
-  <include location="../../../../../icons/basic/basic_icons.qrc"/>
+  <include location="../../../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../../../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../../../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../../../../../resources/icons/basic/basic_icons.qrc"/>
  </resources>
  <connections/>
 </ui>

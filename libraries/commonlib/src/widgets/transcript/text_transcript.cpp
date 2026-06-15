@@ -1,4 +1,4 @@
-#include "transcript.h"
+#include "text_transcript.h"
 #include "message.h"
 
 #include <QScrollBar>
@@ -7,18 +7,26 @@
 
 using namespace commonLib;
 
-Transcript::Transcript (QWidget* parent) : QTextEdit(parent)
+TextTranscript::TextTranscript (QWidget* parent) : QTextEdit(parent), TranscriptBase()
 {
    setReadOnly(true);
    setFontFamily("courier");
 }
 //-----------------------------------------------------------------------------
-void Transcript::addMessage (int type, const QString& msg)
+void TextTranscript::addMessage (MessageType type, const QString& msg)
 {
-   QSettings settings;
+   setTextColor(getColor(type));
+   append(format(type, msg));
 
-   setTextColor(commonLib::color(settings, type));
-   append(msg);
+   QScrollBar* sb = verticalScrollBar();
+   sb->setSliderPosition(sb->maximum());
+}
+//-----------------------------------------------------------------------------
+void TextTranscript::addMessage (MessageType type, const QString& msg, const QString& file, int line, int col)
+{
+   setTextColor(getColor(type));
+   append(format(type, msg, file, line, col));
+
    QScrollBar* sb = verticalScrollBar();
    sb->setSliderPosition(sb->maximum());
 }

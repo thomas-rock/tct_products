@@ -25,14 +25,15 @@ namespace jsonLib
             ConvertToString
          };
 
-         explicit             Json5Parser(QTextStream& in);
+         explicit             Json5Parser(QTextStream& in, const QString& filename);
 
          QVariant             parse();
 
          void                 setNonFinitePolicy(NonFinitePolicy p) { m_nonFinitePolicy = p; }
 
       signals:
-         void                 message (MessageType type, const QString& msg, const QString& file = {}, int line = -1, int col = -1);
+         void                 message (MessageType type, const QString& msg, const QString& file, int line, int col);
+         void                 message (MessageType type, const QString& msg);
 
       private:
          enum class Tok {
@@ -90,6 +91,7 @@ namespace jsonLib
 
       private:
          QTextStream&         m_in;
+         QString              m_filename;
 
          bool                 m_hasPushback = false;
          QChar                m_pushback;

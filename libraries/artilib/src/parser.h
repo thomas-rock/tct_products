@@ -398,7 +398,8 @@ namespace artiLib
          bool                    status () const;
 
       Q_SIGNALS:
-         void                    message (MessageType type, const QString& msg, const QString& file = {}, int line = -1, int col = -1);
+         void                    message (MessageType type, const QString& msg, const QString& file, int line, int col);
+         void                    message (MessageType type, const QString& msg);
 
       protected:
          // parser functions

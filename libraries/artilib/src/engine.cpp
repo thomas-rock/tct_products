@@ -157,6 +157,7 @@ void Engine::handleMessage (MessageType type, const QString& msg, const QString&
    else {
       Parser p;
       connect(&p, SIGNAL(message(MessageType, QString, QString,int,int)), this, SLOT(handleMessage(MessageType, QString,QString,int,int)));
+      connect(&p, SIGNAL(message(MessageType, QString)), this, SLOT(handleMessage(MessageType, QString)));
       m_currentParseData = p.parse(artiPath);
       if (!p.status()) return nullptr;
       m_parseData.insert(artiPath, m_currentParseData);

@@ -147,7 +147,8 @@ void MainPage::check ()
 
    if (settings.value("clearOnCheck", false).toBool()) m_ui->transcript->clear();
    artiLib::Renderer arti;
-   connect(&arti, SIGNAL(message(int, QString, QString, int, int)), this, SLOT(addMessage(int, QString, QString, int, int)));
+   connect(&arti, SIGNAL(message(MessageType, QString, QString, int, int)), this, SLOT(addMessage(MessageType, QString, QString, int, int)));
+   connect(&arti, SIGNAL(message(MessageType, QString)), this, SLOT(addMessage(MessageType, QString)));
    arti.check(currentPath);
 }
 
@@ -187,14 +188,18 @@ void MainPage::addMessage (int type, const QString& msg, const QString& file, in
        (m_ui->errorCheck->isChecked()   && (type & (UserError   | SysError)))   ||
        (m_ui->fatalCheck->isChecked()   && (type & (UserFatal   | SysFatal)))) return;
 
-   QSettings settings;
+   m_ui->transcript->addMessage(type, msg, file, line, col);}
+}
+void MainPage::addMessage (int type, const QString& msg)  {
+   {
+      if ((m_ui->infoCheck->isChecked()    && (type & (UserInfo    | SysInfo)))    ||
+          (m_ui->debugCheck->isChecked()   && (type & UserDebug))                  ||
+          (m_ui->statusCheck->isChecked()  && (type & (UserStatus  | SysStatus)))  ||
+          (m_ui->warningCheck->isChecked() && (type & (UserWarning | SysWarning))) ||
+          (m_ui->errorCheck->isChecked()   && (type & (UserError   | SysError)))   ||
+          (m_ui->fatalCheck->isChecked()   && (type & (UserFatal   | SysFatal)))) return;
 
-   QString prefix = commonLib::prefix(settings, type, file, line, col);
-   QString suffix = commonLib::suffix(settings, type, file, line, col);
-
-   QString text = QString("%1%2%3").arg(prefix, msg, suffix);
-
-   m_ui->transcript->addMessage(type, text);}
+      m_ui->transcript->addMessage(type, msg);}
 }
 void MainPage::outfileClicked (int state)
 {
@@ -293,7 +298,8 @@ void MainPage::openFile ()
 void MainPage::readConfig (QTextStream& cstream)
 {
    OptionsParser parser;
-   connect(&parser, SIGNAL(message(int,QString,QString,int,int)), this, SLOT(addMessage(int,QString,QString,int,int)));
+   connect(&parser, SIGNAL(message(MessageType,QString,QString,int,int)), this, SLOT(addMessage(MessageType,QString,QString,int,int)));
+   connect(&parser, SIGNAL(message(MessageType,QString)), this, SLOT(addMessage(MessageType,QString)));
    if (parser.parse(cstream.readAll()) != OptionsParser::Ok) return;
    QMap<QString, QString> ctx = parser.context();
    foreach (QString key, ctx.keys())

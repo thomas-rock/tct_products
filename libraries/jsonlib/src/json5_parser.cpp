@@ -4,10 +4,9 @@
 #include <QtMath>
 
 using namespace jsonLib;
-using namespace commonLib;
 
-Json5Parser::Json5Parser(QTextStream& in)
-   : m_in(in)
+Json5Parser::Json5Parser(QTextStream& in, const QString &filename)
+   : m_in(in), m_filename(filename)
 {
 }
 
@@ -638,16 +637,10 @@ int Json5Parser::hexValue(QChar c)
 
 void Json5Parser::setError(const QString& msg, const Token& t)
 {
-   MESSAGE(SysError, QString("%1 at line %2, column %3")
-                    .arg(msg)
-                    .arg(t.line)
-                    .arg(t.col));
+   MESSAGE(SysError, msg, m_filename, t.line, t.col);
 }
 
 void Json5Parser::setErrorHere(const QString& msg)
 {
-   MESSAGE(SysError, QString("%1 at line %2, column %3")
-                    .arg(msg)
-                    .arg(m_line)
-                    .arg(m_col));
+   MESSAGE(SysError, msg, m_filename, m_line, m_col);
 }

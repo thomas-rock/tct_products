@@ -82,7 +82,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="commonLib::Transcript" name="transcript"/>
+         <widget class="commonLib::ListTranscript" name="transcript"/>
         </item>
        </layout>
       </widget>
@@ -96,7 +96,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -906,11 +906,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>commonLib::Transcript</class>
-   <extends>QTextEdit</extends>
-   <header>transcript.h</header>
-  </customwidget>
-  <customwidget>
    <class>texteditLib::EditorTab</class>
    <extends>QTabWidget</extends>
    <header>editor_tab.h</header>
@@ -922,13 +917,18 @@
    <header>find_replace_panel.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>commonLib::ListTranscript</class>
+   <extends>QListWidget</extends>
+   <header>list_transcript.h</header>
+  </customwidget>
  </customwidgets>
  <resources>
   <include location="../../../resources/icons/custom/custom_icons.qrc"/>
   <include location="../../../resources/icons/basic/basic_icons.qrc"/>
   <include location="../../../resources/icons/basic/basic_icons.qrc"/>
-  <include location="../icons/textedit_icons.qrc"/>
   <include location="../../../resources/icons/custom/custom_icons.qrc"/>
+  <include location="../icons/textedit_icons.qrc"/>
   <include location="../../../resources/icons/basic/basic_icons.qrc"/>
   <include location="../../../resources/icons/basic/basic_icons.qrc"/>
  </resources>

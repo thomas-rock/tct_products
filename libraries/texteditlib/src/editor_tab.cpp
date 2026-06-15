@@ -16,7 +16,6 @@
 //
 //=============================================================================
 #include "editor_tab.h"
-#include "editor_widget.h"
 #include "lexer_manager.h"
 #include "goto_dialog.h"
 #include "preferences_dialog.h"
@@ -97,11 +96,13 @@ void EditorTab::check ()
          QString json = ed->text();
          QTextStream jstream(&json);
 
-         jsonLib::Json5Parser j5p(jstream);
+         jsonLib::Json5Parser j5p(jstream, ed->filename());
 
          // forward messages
-         connect(&j5p, &jsonLib::Json5Parser::message,
-                 this, &EditorTab::message);
+         connect(&j5p, SIGNAL(message(MessageType,QString,QString,int,int)),
+                 this, SIGNAL(message(MessageType,QString,QString,int,int)));
+         connect(&j5p, SIGNAL(message(MessageType,QString)),
+                 this, SIGNAL(message(MessageType,QString)));
 
          j5p.parse();
       }
@@ -109,10 +110,11 @@ void EditorTab::check ()
          QString filename = ed->filename();
 
          artiLib::Parser p;
-         connect(&p, &artiLib::Parser::message,
-                 this, &EditorTab::message);
+         connect(&p,   SIGNAL(message(MessageType,QString,QString,int,int)),
+                 this, SIGNAL(message(MessageType,QString,QString,int,int)));
+         connect(&p,   SIGNAL(message(MessageType,QString)),
+                 this, SIGNAL(message(MessageType,QString)));
 
-         connect(&p, SIGNAL(message(MessageType,QString,QString,int,int)), this, SLOT(handleMessage(MessageType, QString,QString,int,int)));
          p.parse(filename);
       }
       else
@@ -187,8 +189,9 @@ bool EditorTab::fileOpen (const QString& filename, int line, int pos)
 
    // position cursor
    if (ed && line != -1) {
-      if (pos != -1) ed->setCursorPosition(line, pos);
-      else ed->gotoLine(line);
+      ed->setFocus();
+      if (pos != -1) ed->setCursorPosition(line-1, pos-1);
+      else ed->gotoLine(line-1);
    }
 
    return ed != nullptr;

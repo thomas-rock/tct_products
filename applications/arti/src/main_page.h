@@ -58,7 +58,8 @@ class MainPage : public QMainWindow
       void                    editRequest (QString);
 
    protected Q_SLOTS:
-      void                    addMessage (int type, const QString& msg, const QString& file = {}, int line = -1, int col = -1);
+      void                    addMessage (int type, const QString& msg, const QString& file, int line, int col);
+      void                    addMessage (int type, const QString& msg);
       void                    outfileClicked (int state);
       void                    browseOutfile ();
 

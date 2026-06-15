@@ -19,10 +19,11 @@
 
 #include <QTabWidget>
 #include "texteditlib_global.h"
+#include "editor_widget.h"
+#include "message.h"
 
 namespace texteditLib
 {
-   class EditorWidget;
    class TEXTEDITLIB_EXPORT EditorTab : public QTabWidget
    {
       Q_OBJECT
@@ -138,7 +139,8 @@ namespace texteditLib
          virtual void         tabSelected (QAction* action);
 
       Q_SIGNALS:
-         void                 message (int type, QString msg);
+         void                 message (MessageType type, const QString& msg);
+         void                 message (MessageType type, const QString& msg,  const QString& file, int line, int col);
          void                 editorChanged ();
          void                 cursorPositionChanged(int line, int index);
          void                 selectionChanged ();

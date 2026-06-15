@@ -74,6 +74,7 @@ bool Renderer::render (const QString& arti_name, const QMap<QString, QString>& c
 
    MESSAGE(SysStatus, QString("Starting artifact generation using template '%1'\n").arg(arti_name));
    connect(m_engine, SIGNAL(message(int,QString,QString,int,int)), this, SIGNAL(message(int, QString, QString, int, int)));
+   connect(m_engine, SIGNAL(message(int,QString)), this, SIGNAL(message(int, QString)));
    bool status = m_engine->render(arti_name, qcontext);
    MESSAGE(SysStatus, QString("Artifact generation complete - Errors: %1. Warnings: %2").arg(m_engine->errors()).arg(m_engine->warnings()));
    return status;
@@ -88,11 +89,13 @@ QVariant Renderer::readJson (const QString& filename)
    if (jfile.open(QIODevice::ReadOnly|QIODevice::Text)) {
       QTextStream jstream(&jfile);
 
-      jsonLib::Json5Parser j5p(jstream);
+      jsonLib::Json5Parser j5p(jstream, filename);
 
       // forward messages
-      connect(&j5p, &jsonLib::Json5Parser::message,
-              this, &Renderer::message);
+      connect(&j5p, SIGNAL(message(MessageType, const QString&, const QString&, int, col)),
+              this, SIGNAL(message(MessageType, const QString&, const QString&, int, col)));
+      connect(&j5p, SIGNAL(message(MessageType, const QString&)),
+              this, SIGNAL(message(MessageType, const QString&)));
 
       QVariant rtn = j5p.parse();
 
