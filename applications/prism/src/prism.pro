@@ -45,14 +45,12 @@ HEADERS += \
    cursor_track_view.h \
    cursor_track_widget.h \
    fixed_row_delegate.h \
-   iwave_importer.h \
    iwave_renderer.h \
    prism.h \
    signal_tree_widget.h \
    time_ruler_scene.h \
    time_ruler_view.h \
    time_ruler_widget.h \
-   vcd_importer.h \
    vcd_parser.h \
    wave_display_widget.h \
    wave_graphics_view.h \
@@ -79,7 +77,6 @@ SOURCES += \
    time_ruler_scene.cpp \
    time_ruler_view.cpp \
    time_ruler_widget.cpp \
-   vcd_importer.cpp \
    vcd_parser.cpp \
    wave_display_widget.cpp \
    wave_graphics_view.cpp \
