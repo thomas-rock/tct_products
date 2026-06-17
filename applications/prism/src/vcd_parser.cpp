@@ -1,178 +1,420 @@
 #include "vcd_parser.h"
 
-using namespace vcd;
-
-ParseError::ParseError(SourceLocation where, const QString& msg)
-   : std::runtime_error(format(where, msg).toStdString()), loc(where)
-{
-}
-
-QString ParseError::format(SourceLocation where, const QString& msg)
-{
-   return QStringLiteral("VCD parse error at line %1, column %2: %3")
-      .arg(where.line)
-      .arg(where.column)
-      .arg(msg);
-}
+#include <QFile>
 
 // -----------------------------------------------------------------------------
 // VCD Parser
 // -----------------------------------------------------------------------------
 
-VcdParser::VcdParser(QTextStream& in) : m_in(in) {}
+VcdParser::VcdParser(QTextStream& in) : QObject(),  m_in(in)
+{
+   m_filename = qobject_cast<QFile*>(m_in.device())->fileName();
+   m_errors   = 0;
+   m_warnings = 0;
+}
 
 std::unique_ptr<WaveformDocument> VcdParser::parse()
 {
-   std::unique_ptr<WaveformDocument> document = std::make_unique<WaveformDocument>();
+   m_document = std::make_unique<WaveformDocument>();
 
+   if (!eof()) parseDeclarationCommands();
+   if (!eof()) parseSimulationCommands();
+
+   MESSAGE(SysDebug, "parse complete");
+
+   return std::move(m_document);
+}
+
+void VcdParser::parseDeclarationCommands ()
+{
+   m_in_definitions = true;
+
+   while (!eof() && m_in_definitions) {
+      QString token = parseToken();
+      MESSAGE(SysDebug, QString("next declaration: %1").arg(token));
+      if      (token == QStringLiteral("$comment"))          parseComment();
+      else if (token == QStringLiteral("$date"))             parseDate();
+      else if (token == QStringLiteral("$scope"))            parseScope();
+      else if (token == QStringLiteral("$timescale"))        parseTimescale();
+      else if (token == QStringLiteral("$upscope"))          parseUpscope();
+      else if (token == QStringLiteral("$var"))              parseVar();
+      else if (token == QStringLiteral("$version"))          parseVersion();
+      else if (token == QStringLiteral("$enddefinitions"))   parseEndDefinition();
+      else MESSAGE(SysError, QString("Unknown VCD declaration command: '%1'").arg(token), m_filename, m_line, m_column);
+   }
+}
+
+void VcdParser::parseSimulationCommands ()
+{
+   while (!eof()) {
+      skipWhitespace();
+      if (peek() == '#') {
+         get();
+         parseSimulationTime();
+      }
+      else if (peek() != '$') {
+         parseValueChange();
+      }
+      else {
+         QString token = parseToken();
+         MESSAGE(SysDebug, QString("next simulation command: %1").arg(token));
+         if      (token == QStringLiteral("$dumpall"))          parseDumpall();
+         else if (token == QStringLiteral("$dumpoff"))          parseDumpoff();
+         else if (token == QStringLiteral("$dumpon"))           parseDumpon();
+         else if (token == QStringLiteral("$dumpvars"))         parseDumpvars();
+         else if (token == QStringLiteral("$comment"))          parseComment();
+         else MESSAGE(SysError, QString("Unknown VCD simulation command: '%1'").arg(token), m_filename, m_line, m_column);
+      }
+   }
+}
+
+//------ declaration command parse functions ----------------------------
+void VcdParser::parseComment ()
+{
+   // '$comment' comment_text '$end'
+
+   // comments are ignored
+   parseTextUntilEnd();
+}
+
+void VcdParser::parseDate ()
+{
+   // '$date' date_text '$end'
+
+   // dates are ignored
+   parseTextUntilEnd();
+}
+
+void VcdParser::parseScope ()
+{
+   // '$scope' scope_type scope_identifier '$end'
+
+   QString scope_type = parseToken();        // Not used  but verified
+   if (scope_type != QStringLiteral("begin") &&
+       scope_type != QStringLiteral("fork")  &&
+       scope_type != QStringLiteral("function")  &&
+       scope_type != QStringLiteral("module")  &&
+       scope_type != QStringLiteral("task"))
+      MESSAGE(SysError, QString("Unknown scope type: '%1'").arg(scope_type), m_filename, m_line, m_column);
+
+   QString scope_id = parseToken();
+   QString fullPath = (m_scopeStack.isEmpty()) ? scope_id : m_scopeStack.last()->fullPath + "." + scope_id;
+   auto* node = m_document->createDesignNode(scope_id, fullPath);
+   if (m_scopeStack.isEmpty())
+      m_document->addHierarchyRoot(node);
+   else
+      m_scopeStack.last()->children.push_back(node);
+
+   m_scopeStack.push_back(node);
+
+   expectKeyword(QStringLiteral("$end"));
+}
+
+void VcdParser::parseTimescale ()
+{
+   // '$timescale' time_number time_unit '$end'
+
+   int time_number = parseDecimalNumber();
+   if (time_number != 1 && time_number != 10 && time_number != 100) {
+      MESSAGE(SysError, QString("Unexpected timescale time number: '%1'. Expected 1, 10, or 100").arg(time_number), m_filename, m_line, m_column);
+      time_number = 1;
+   }
+
+   qreal unit_seconds = 1e-9; // default ns
+   QString time_unit = parseToken();
+   if      (time_unit == QStringLiteral("s"))  unit_seconds = 1.0;
+   else if (time_unit == QStringLiteral("ms")) unit_seconds = 1.0e-3;
+   else if (time_unit == QStringLiteral("us")) unit_seconds = 1.0e-6;
+   else if (time_unit == QStringLiteral("ns")) unit_seconds = 1.0e-9;
+   else if (time_unit == QStringLiteral("ps")) unit_seconds = 1.0e-12;
+   else if (time_unit == QStringLiteral("fs")) unit_seconds = 1.0e-15;
+   else
+      MESSAGE(SysError, QString("Unknown time unit '%1'. Expected 's', 'ms', 'us', 'ns', 'ps' or 'fs'").arg(time_unit), m_filename, m_line, m_column);
+
+   const qreal unit_ns = unit_seconds / 1.0e-9;
+
+   m_timescaleFactor = time_number * unit_ns;
+
+   expectKeyword(QStringLiteral("$end"));
+}
+
+void VcdParser::parseUpscope ()
+{
+   // '$upscope' '$end'
+
+   if (!m_scopeStack.isEmpty())
+      m_scopeStack.removeLast();
+
+   expectKeyword(QStringLiteral("$end"));
+}
+
+void VcdParser::parseVar ()
+{
+   // '$var' var_type size identifier_code reference '$end'
+
+   QString var_type = parseToken();
+   int size         = parseDecimalNumber();
+   QString id_code  = parseToken();
+
+   // reference
+   //    : identifier
+   //    | identifier '[' bit_select_index ']'
+   //    | identifier '[' msb_index ':' lsb_index ']'
+   QString ref_id      = parseToken();
+   int msb_select      = 0;
+   int lsb             = 0;
+   skipWhitespace();
+   if (peek() == '[') {
+      get();
+      msb_select = parseDecimalNumber();
+      lsb = msb_select;
+      skipWhitespace();
+      if (peek() == ':') {
+         get();
+         lsb = parseDecimalNumber();
+         skipWhitespace();
+      }
+      QChar c = get();
+      if (c != ']')
+         MESSAGE(SysError, QString("Unexpected token '%1'. Expected ']'").arg(c), m_filename, m_line, m_column);
+   }
+   expectKeyword(QStringLiteral("$end"));
+
+   const int index = m_signals.size();
+   m_idToIndex.insert(id_code, index);
+   SignalBuildState state;
+   state.signal = m_document->createSignal(ref_id,
+                                           (size <= 1) ?  WaveSignalKind::Bit : WaveSignalKind::Bus,
+                                           size,
+                                           m_scopeStack.last()->fullPath);
+   m_scopeStack.last()->signalList.push_back(state.signal);
+   m_signals.push_back(state);
+}
+
+void VcdParser::parseVersion ()
+{
+   // '$version' text_string '$end'
+
+   // versions are ignored
+   parseTextUntilEnd();
+}
+
+void VcdParser::parseEndDefinition ()
+{
+   // '$enddefinitions' '$end'
+
+   expectKeyword(QStringLiteral("$end"));
+   m_in_definitions = false;
+}
+
+//------ simulation command parse functions ----------------------------
+void VcdParser::parseDumpall()
+{
+   // '$dumpall' value_change+ '$end'
+
+   parseValueChangeUntilEnd();
+}
+
+void VcdParser::parseDumpoff()
+{
+   // '$dumpoff' value_change+ '$end'
+
+   parseValueChangeUntilEnd();
+}
+
+void VcdParser::parseDumpon()
+{
+   // '$dumpon' value_change+ '$end'
+
+   parseValueChangeUntilEnd();
+}
+
+void VcdParser::parseDumpvars()
+{
+   // '$dumpvars' value_change+ '$end'
+
+   parseValueChangeUntilEnd();
+}
+
+void VcdParser::parseSimulationTime()
+{
+   // '#' decimal_number
+   m_currentTime = parseTimeValue();
+   debugMessage(QString("new simulation time: %1").arg(m_currentTime));
+}
+
+void VcdParser::parseValueChange()
+{
+   debugMessage("parsing value change");
    skipWhitespace();
 
-   // value_change_dump_definitions
-   //    : declaration_command+ simulation_command+
-   //    ;
-   if (!isDeclarationCommandStart()) {
-      fail(QStringLiteral("expected declaration command"));
+   QString value;
+   QString idCode;
+   QString radix;
+
+   const QChar c = peek().toLower();
+   if (c == QLatin1Char('0') ||
+       c == QLatin1Char('1') ||
+       c == QLatin1Char('x') ||
+       c == QLatin1Char('z')) {
+
+      value  = get();
+      idCode = parseToken();
+
+      if (idCode.isEmpty())
+         errorMessage(QString("Expected identifier code after scalar value"));
    }
 
-   do {
-      Declaration decl = parseDeclarationCommand();
-      if (decl.kind == Declaration::Kind::Scope)
-         m_scopeStack.push_back(decl.scope.identifier);
-      else if (decl.kind == Declaration::Kind::Upscope)
-      {
-         if (!m_scopeStack.isEmpty())
-            m_scopeStack.removeLast();
-      }
-      else if (decl.kind == Declaration::Kind::Timescale)
-      {
-         const int multiplier = decl.timescale.number;
+   else if (c == QLatin1Char('b') ||
+            c == QLatin1Char('r')) {
 
-         // Convert unit to seconds
-         qreal unitSeconds = 1e-9; // default ns
-
-         if (decl.timescale.unit == TimeUnit::S)
-            unitSeconds = 1.0;
-         else if (decl.timescale.unit == TimeUnit::Ms)
-            unitSeconds = 1e-3;
-         else if (decl.timescale.unit == TimeUnit::Us)
-            unitSeconds = 1e-6;
-         else if (decl.timescale.unit == TimeUnit::Ns)
-            unitSeconds = 1e-9;
-         else if (decl.timescale.unit == TimeUnit::Ps)
-            unitSeconds = 1e-12;
-         else if (decl.timescale.unit == TimeUnit::Fs)
-            unitSeconds = 1e-15;
-
-         // Convert to nanoseconds
-         const qreal unitNs = unitSeconds / 1e-9;
-
-         m_timescaleFactor = multiplier * unitNs;
-      }
-      else if (decl.kind == Declaration::Kind::Var)
-      {
-         VarDecl var = decl.var;
-         m_varsById.insert(var.idCode, var);
-      }
-
-//      file.declarations.push_back(parseDeclarationCommand());
-      skipWhitespace();
-   } while (!eof() && isDeclarationCommandStart());
-
-   if (!isSimulationCommandStart()) {
-      fail(QStringLiteral("expected simulation command"));
+      radix  = get();
+      value  = parseToken();
+      idCode = parseToken();
+      if (idCode.isEmpty())
+         errorMessage(QString("Expected identifier code after signal value"));
    }
 
-   do {
-      SimulationCommand cmd = parseSimulationCommand();
-      if (cmd.kind == SimulationCommand::Kind::Time)
-      {
-         m_currentTime = cmd.time;
-      }
-      else if (cmd.kind == SimulationCommand::Kind::ValueChange)
-      {
-         QString idCode;
-         QString value;
+   // insert value change into document
+   const auto it = m_idToIndex.constFind(idCode);
+   if (it == m_idToIndex.constEnd())
+      return;
 
-         idCode = cmd.valueChange.idCode;
-         value = cmd.valueChange.value;
-         m_changesById[idCode].push_back({m_currentTime, value});
-      }
+   SignalBuildState& state = m_signals[*it];
 
-
-//      file.simulationCommands.push_back(parseSimulationCommand());
-      skipWhitespace();
-   } while (!eof());
-
-   // re-organize value changes
-   for (auto it = m_varsById.begin(); it != m_varsById.end(); ++it)
+   // First value ever seen for this signal.
+   if (!state.hasValue)
    {
-      const VarDecl& var = it.value();
+      state.currentValue = value;
+      state.currentStartTime = m_currentTime;
+      state.hasValue = true;
+      return;
+   }
 
-      WaveSignal* sig =
-         m_document->createSignal(var.reference.name,
-                                  (var.size <= 1) ?  WaveSignalKind::Bit : WaveSignalKind::Bus,
-                                  var.size,
-                                  m_scopeStack.last());
+   // Same value: no new segment needed.
+   if (state.currentValue == value)
+      return;
 
-      DesignNode* node = ensureDesignNode(var.scopePath);
-      if (node)
-         node->signalList.push_back(sig);
+   // Close previous segment.
+   state.signal->segments.push_back({
+      state.currentStartTime,
+      m_currentTime,
+      state.currentValue
+   });
 
-      const QVector<ParsedChange> changes = m_changesById.value(var.idCode);
+   // Start new segment.
+   state.currentValue = value;
+   state.currentStartTime = m_currentTime;
+}
 
-      // No changes at all: show unknown for the full sim range.
-      if (changes.isEmpty())
-      {
-         if (m_lastTime > 0.0)
-            sig->segments.push_back({0.0, m_lastTime, defaultUnknownValue(var)});
+void VcdParser::parseValueChangeUntilEnd()
+{
+   while (!eof()) {
+      parseValueChange();
+      skipWhitespace();
+      if (peek() == '$') {
+         expectKeyword(QStringLiteral("$end"));
+         break;
+      }
+   }
+}
+
+//------ low-level parse functions ----------------------------
+// Reads text until a standalone $end token. The $end token is consumed.
+QString VcdParser::parseTextUntilEnd()
+{
+   skipWhitespace();
+
+   QString text;
+
+   while (!eof()) {
+      if (peek() == QLatin1Char('$')) {
+         const QString token = parseToken();
+         if (token == QStringLiteral("$end")) {
+            return text.trimmed();
+         }
+
+         text.append(token);
          continue;
       }
 
-      // First change occurs after time 0: fill leading gap with unknown.
-      if (changes.first().time > 0.0)
-      {
-         sig->segments.push_back({
-            0.0,
-            changes.first().time,
-            defaultUnknownValue(var)
-         });
-      }
-
-      // Build segments from changes.
-      for (int i = 0; i < changes.size(); ++i)
-      {
-         const qreal start = changes[i].time;
-         const qreal end = (i + 1 < changes.size()) ? changes[i + 1].time : m_lastTime;
-
-         if (end > start)
-            sig->segments.push_back({start, end, changes[i].value});
-      }
+      text.append(get());
    }
 
-   return std::move(document);
+   errorMessage(QString("Expected '$end'"));
+   return text.trimmed();
 }
 
-SourceLocation VcdParser::loc() const
+void VcdParser::expectKeyword(const QString& keyword)
 {
-   return SourceLocation{m_offset, m_line, m_column};
+   const QString token = parseToken();
+   if (token != keyword) {
+      errorMessage(QString("Unexpected keyword '%1'. Expected '%2'").arg(token, keyword));
+   }
 }
 
-[[noreturn]] void VcdParser::fail(const QString& msg) const
+int VcdParser::parseDecimalNumber()
 {
-   throw ParseError(loc(), msg);
+   skipWhitespace();
+
+   QString digits;
+   while (!eof() && peek().isDigit())
+      digits.append(get());
+
+   if (digits.isEmpty())
+      errorMessage(QString("Expected decimal number"));
+
+   bool ok = false;
+   const int value = digits.toInt(&ok, 10);
+   if (!ok) {
+      errorMessage(QString("Invalid decimal number '%1'").arg(digits));
+   }
+
+   return value;
 }
 
-bool VcdParser::isWhitespace(QChar c)
+quint64 VcdParser::parseTimeValue()
 {
-   return c == QLatin1Char(' ')  ||
-          c == QLatin1Char('\t') ||
-          c == QLatin1Char('\r') ||
-          c == QLatin1Char('\n');
+   skipWhitespace();
+
+   QString digits;
+   while (!eof() && peek().isDigit())
+      digits.append(get());
+
+   if (digits.isEmpty())
+      errorMessage(QString("Expected decimal number"));
+
+   bool ok = false;
+   const quint64 value = digits.toULongLong(&ok, 10);
+   if (!ok)
+      errorMessage(QString("Invalid simulation time '%1'").arg(digits));
+
+   return value;
 }
 
-bool VcdParser::isDigit(QChar c)
+
+
+//------ tokenizer functions ----------------------------
+void VcdParser::skipWhitespace()
 {
-   return c >= QLatin1Char('0') && c <= QLatin1Char('9');
+   while (!eof() && peek().isSpace())
+      get();
+}
+
+QString VcdParser::parseToken()
+{
+   skipWhitespace();
+
+   if (eof()) {
+      errorMessage(QString("Unexpected end-of-file"));
+      return QString();
+   }
+
+   QString token;
+   while (!eof() && !peek().isSpace())
+      token.append(get());
+
+   return token;
 }
 
 bool VcdParser::eof()
@@ -193,7 +435,6 @@ QChar VcdParser::peek()
       m_in >> m_lookahead;
       m_hasLookahead = true;
    }
-
    return m_lookahead;
 }
 
@@ -208,7 +449,7 @@ QChar VcdParser::get()
    }
    else {
       if (m_in.atEnd()) {
-         fail(QStringLiteral("unexpected end of file"));
+         errorMessage(QString("Unexpected end-of-file"));
       }
       m_in >> c;
    }
@@ -226,712 +467,29 @@ QChar VcdParser::get()
    return c;
 }
 
-void VcdParser::skipWhitespace()
+//------ utility functions ----------------------------
+void VcdParser::debugMessage (const QString& msg, bool noloc)
 {
-   while (!eof() && isWhitespace(peek())) {
-      get();
-   }
+   if (noloc) MESSAGE(SysDebug, msg);
+   else       MESSAGE(SysDebug, msg, m_filename, m_line, m_column);
 }
 
-QString VcdParser::parseToken()
+void VcdParser::errorMessage (const QString& msg, bool noloc)
 {
-   skipWhitespace();
-
-   if (eof()) {
-      fail(QStringLiteral("expected token"));
-   }
-
-   QString token;
-   while (!eof() && !isWhitespace(peek())) {
-      token.append(get());
-   }
-
-   return token;
+   if (noloc) MESSAGE(SysError, msg);
+   else       MESSAGE(SysError, msg, m_filename, m_line, m_column);
+   m_errors++;
 }
 
-QString VcdParser::readRawTokenFromCurrentPosition()
+void VcdParser::warningMessage (const QString& msg, bool noloc)
 {
-   QString token;
-   while (!eof() && !isWhitespace(peek())) {
-      token.append(get());
-   }
-   return token;
+   if (noloc) MESSAGE(SysWarning, msg);
+   else       MESSAGE(SysWarning, msg, m_filename, m_line, m_column);
+   m_warnings++;
 }
 
-bool VcdParser::nextTokenIs(const QString& keyword)
+void VcdParser::infoMessage (const QString& msg, bool noloc)
 {
-   skipWhitespace();
-
-   const QString token = parseToken();
-   const bool    match = (token == keyword);
-
-   // We cannot un-read a whole token with the one-char buffer, so this helper
-   // intentionally consumes the token. Use only when consumption is desired.
-   return match;
+   if (noloc) MESSAGE(SysInfo, msg);
+   else       MESSAGE(SysInfo, msg, m_filename, m_line, m_column);
 }
-
-void VcdParser::expectKeyword(const QString& keyword)
-{
-   const QString token = parseToken();
-   if (token != keyword) {
-      fail(QStringLiteral("expected '%1', got '%2'").arg(keyword, token));
-   }
-}
-
-void VcdParser::expectChar(QChar expected)
-{
-   skipWhitespace();
-
-   if (peek() != expected) {
-      fail(QStringLiteral("expected '%1'").arg(expected));
-   }
-
-   get();
-}
-
-int VcdParser::parseDecimalNumber()
-{
-   const QString token = parseToken();
-
-   bool ok = false;
-   const int value = token.toInt(&ok, 10);
-   if (!ok) {
-      fail(QStringLiteral("expected decimal number, got '%1'").arg(token));
-   }
-
-   return value;
-}
-
-quint64 VcdParser::parseUnsigned64AfterHash()
-{
-   skipWhitespace();
-   expectChar(QLatin1Char('#'));
-
-   QString digits;
-   while (!eof() && isDigit(peek())) {
-      digits.append(get());
-   }
-
-   if (digits.isEmpty()) {
-      fail(QStringLiteral("expected decimal number after '#'"));
-   }
-
-   bool ok = false;
-   const quint64 value = digits.toULongLong(&ok, 10);
-   if (!ok) {
-      fail(QStringLiteral("invalid simulation time '%1'").arg(digits));
-   }
-
-   return value;
-}
-
-// Reads text until a standalone $end token. The $end token is consumed.
-QString VcdParser::parseTextUntilEnd()
-{
-   skipWhitespace();
-
-   QString text;
-
-   while (!eof()) {
-      const QChar c = peek();
-
-      if (c == QLatin1Char('$')) {
-         const QString token = readRawTokenFromCurrentPosition();
-         if (token == QStringLiteral("$end")) {
-            trimRight(text);
-            return text;
-         }
-
-         text.append(token);
-         continue;
-      }
-
-      text.append(get());
-   }
-
-   fail(QStringLiteral("expected '$end'"));
-}
-
-void VcdParser::trimRight(QString& s)
-{
-   while (!s.isEmpty() && isWhitespace(s.back())) {
-      s.chop(1);
-   }
-}
-
-void VcdParser::trimLeft(QString& s)
-{
-   while (!s.isEmpty() && isWhitespace(s.front())) {
-      s.remove(0, 1);
-   }
-}
-
-bool VcdParser::isDeclarationCommandToken(const QString& token) const
-{
-   return token == QStringLiteral("$comment")        ||
-          token == QStringLiteral("$date")           ||
-          token == QStringLiteral("$enddefinitions") ||
-          token == QStringLiteral("$scope")          ||
-          token == QStringLiteral("$timescale")      ||
-          token == QStringLiteral("$upscope")        ||
-          token == QStringLiteral("$var")            ||
-          token == QStringLiteral("$version");
-}
-
-bool VcdParser::isSimulationCommandToken(const QString& token) const
-{
-   return token == QStringLiteral("$dumpall")  ||
-          token == QStringLiteral("$dumpoff")  ||
-          token == QStringLiteral("$dumpon")   ||
-          token == QStringLiteral("$dumpvars") ||
-          token == QStringLiteral("$comment");
-}
-
-bool VcdParser::isDeclarationCommandStart()
-{
-   skipWhitespace();
-   if (eof()) {
-      return false;
-   }
-
-   if (peek() != QLatin1Char('$')) {
-      return false;
-   }
-
-   // Lookahead by reading the token into a small parser-side buffer would be
-   // cleaner, but to keep one-char lookahead, use token dispatch functions
-   // that consume. For start checks, use a lightweight prefix matcher.
-   return startsWithAnyKeyword({
-      QStringLiteral("$comment"),
-      QStringLiteral("$date"),
-      QStringLiteral("$enddefinitions"),
-      QStringLiteral("$scope"),
-      QStringLiteral("$timescale"),
-      QStringLiteral("$upscope"),
-      QStringLiteral("$var"),
-      QStringLiteral("$version")
-   });
-}
-
-bool VcdParser::isSimulationCommandStart()
-{
-   skipWhitespace();
-
-   if (eof()) {
-      return false;
-   }
-
-   const QChar c = peek();
-   return c == QLatin1Char('#') ||
-          isValueChangeStart(c) ||
-          startsWithAnyKeyword({
-             QStringLiteral("$dumpall"),
-             QStringLiteral("$dumpoff"),
-             QStringLiteral("$dumpon"),
-             QStringLiteral("$dumpvars"),
-             QStringLiteral("$comment")
-          });
-}
-
-bool VcdParser::startsWithAnyKeyword(const QVector<QString>& keywords)
-{
-   // QTextStream is sequential from the parser's point of view. To avoid
-   // consuming real input during lookahead, this routine peeks by temporarily
-   // reading into m_tokenLookahead via parseTokenWithReplay().
-   const QString token = peekToken();
-
-   for (const QString& keyword : keywords) {
-      if (token == keyword) {
-         return true;
-      }
-   }
-
-   return false;
-}
-
-QString VcdParser::peekToken()
-{
-   if (!m_hasPeekedToken) {
-      m_peekedToken = parseTokenRawNoPeekToken();
-      m_hasPeekedToken = true;
-   }
-
-   return m_peekedToken;
-}
-
-QString VcdParser::parseTokenFromPeekBufferOrInput()
-{
-   if (m_hasPeekedToken) {
-      const QString token = m_peekedToken;
-      m_peekedToken.clear();
-      m_hasPeekedToken = false;
-      return token;
-   }
-
-   return parseTokenRawNoPeekToken();
-}
-
-QString VcdParser::parseTokenRawNoPeekToken()
-{
-   skipWhitespace();
-
-   if (eof()) {
-      fail(QStringLiteral("expected token"));
-   }
-
-   QString token;
-   while (!eof() && !isWhitespace(peek())) {
-      token.append(get());
-   }
-
-   return token;
-}
-
-// Override parseToken users through this macro-like convention by keeping this
-// function near dispatch code. Existing parse routines call parseToken(), so
-// parseToken() itself delegates to this once token peeking exists.
-
-bool VcdParser::isValueChangeStart(QChar c)
-{
-   return c == QLatin1Char('0') ||
-          c == QLatin1Char('1') ||
-          c == QLatin1Char('x') ||
-          c == QLatin1Char('X') ||
-          c == QLatin1Char('z') ||
-          c == QLatin1Char('Z') ||
-          c == QLatin1Char('b') ||
-          c == QLatin1Char('B') ||
-          c == QLatin1Char('r') ||
-          c == QLatin1Char('R');
-}
-
-Declaration VcdParser::parseDeclarationCommand()
-{
-   skipWhitespace();
-
-   const QString keyword = parseTokenFromPeekBufferOrInput();
-
-   if (keyword == QStringLiteral("$comment"))        return parseDeclarationCommentAfterKeyword();
-   if (keyword == QStringLiteral("$date"))           return parseDeclarationDateAfterKeyword();
-   if (keyword == QStringLiteral("$enddefinitions")) return parseDeclarationEndDefinitionsAfterKeyword();
-   if (keyword == QStringLiteral("$scope"))          return parseDeclarationScopeAfterKeyword();
-   if (keyword == QStringLiteral("$timescale"))      return parseDeclarationTimescaleAfterKeyword();
-   if (keyword == QStringLiteral("$upscope"))        return parseDeclarationUpscopeAfterKeyword();
-   if (keyword == QStringLiteral("$var"))            return parseDeclarationVarAfterKeyword();
-   if (keyword == QStringLiteral("$version"))        return parseDeclarationVersionAfterKeyword();
-
-   fail(QStringLiteral("expected declaration command, got '%1'").arg(keyword));
-}
-
-Declaration VcdParser::parseDeclarationCommentAfterKeyword()
-{
-   Declaration d;
-   d.kind = Declaration::Kind::Comment;
-   d.text = parseTextUntilEnd();
-   return d;
-}
-
-Declaration VcdParser::parseDeclarationDateAfterKeyword()
-{
-   Declaration d;
-   d.kind = Declaration::Kind::Date;
-   d.text = parseTextUntilEnd();
-   return d;
-}
-
-Declaration VcdParser::parseDeclarationEndDefinitionsAfterKeyword()
-{
-   Declaration d;
-   d.kind = Declaration::Kind::EndDefinitions;
-   expectKeyword(QStringLiteral("$end"));
-   return d;
-}
-
-Declaration VcdParser::parseDeclarationScopeAfterKeyword()
-{
-   Declaration d;
-   d.kind = Declaration::Kind::Scope;
-   d.scope.type       = parseScopeType();
-   d.scope.identifier = parseTokenFromPeekBufferOrInput();
-   expectKeyword(QStringLiteral("$end"));
-   return d;
-}
-
-ScopeType VcdParser::parseScopeType()
-{
-   const QString token = parseTokenFromPeekBufferOrInput();
-
-   if (token == QStringLiteral("begin"))    return ScopeType::Begin;
-   if (token == QStringLiteral("fork"))     return ScopeType::Fork;
-   if (token == QStringLiteral("function")) return ScopeType::Function;
-   if (token == QStringLiteral("module"))   return ScopeType::Module;
-   if (token == QStringLiteral("task"))     return ScopeType::Task;
-
-   fail(QStringLiteral("invalid scope_type '%1'").arg(token));
-}
-
-Declaration VcdParser::parseDeclarationTimescaleAfterKeyword()
-{
-   Declaration d;
-   d.kind = Declaration::Kind::Timescale;
-   d.timescale.number = parseTimeNumber();
-   d.timescale.unit   = parseTimeUnit();
-   expectKeyword(QStringLiteral("$end"));
-   return d;
-}
-
-int VcdParser::parseTimeNumber()
-{
-   const int n = parseDecimalNumber();
-   if (n != 1 && n != 10 && n != 100) {
-      fail(QStringLiteral("invalid time_number; expected 1, 10, or 100"));
-   }
-   return n;
-}
-
-TimeUnit VcdParser::parseTimeUnit()
-{
-   const QString token = parseTokenFromPeekBufferOrInput();
-
-   if (token == QStringLiteral("s"))  return TimeUnit::S;
-   if (token == QStringLiteral("ms")) return TimeUnit::Ms;
-   if (token == QStringLiteral("us")) return TimeUnit::Us;
-   if (token == QStringLiteral("ns")) return TimeUnit::Ns;
-   if (token == QStringLiteral("ps")) return TimeUnit::Ps;
-   if (token == QStringLiteral("fs")) return TimeUnit::Fs;
-
-   fail(QStringLiteral("invalid time_unit '%1'").arg(token));
-}
-
-Declaration VcdParser::parseDeclarationUpscopeAfterKeyword()
-{
-   Declaration d;
-   d.kind = Declaration::Kind::Upscope;
-   expectKeyword(QStringLiteral("$end"));
-   return d;
-}
-
-Declaration VcdParser::parseDeclarationVarAfterKeyword()
-{
-   Declaration d;
-   d.kind = Declaration::Kind::Var;
-   d.var.type        = parseVarType();
-   d.var.size        = parseDecimalNumber();
-   d.var.idCode      = parseTokenFromPeekBufferOrInput();
-   d.var.reference   = parseReferenceUntilEnd();
-   expectKeyword(QStringLiteral("$end"));
-   return d;
-}
-
-VarType VcdParser::parseVarType()
-{
-   const QString token = parseTokenFromPeekBufferOrInput();
-
-   if (token == QStringLiteral("event"))     return VarType::Event;
-   if (token == QStringLiteral("integer"))   return VarType::Integer;
-   if (token == QStringLiteral("parameter")) return VarType::Parameter;
-   if (token == QStringLiteral("real"))      return VarType::Real;
-   if (token == QStringLiteral("realtime"))  return VarType::Realtime;
-   if (token == QStringLiteral("reg"))       return VarType::Reg;
-   if (token == QStringLiteral("supply0"))   return VarType::Supply0;
-   if (token == QStringLiteral("supply1"))   return VarType::Supply1;
-   if (token == QStringLiteral("time"))      return VarType::Time;
-   if (token == QStringLiteral("tri"))       return VarType::Tri;
-   if (token == QStringLiteral("triand"))    return VarType::TriAnd;
-   if (token == QStringLiteral("trior"))     return VarType::TriOr;
-   if (token == QStringLiteral("trireg"))    return VarType::TriReg;
-   if (token == QStringLiteral("tri0"))      return VarType::Tri0;
-   if (token == QStringLiteral("tri1"))      return VarType::Tri1;
-   if (token == QStringLiteral("wand"))      return VarType::WAnd;
-   if (token == QStringLiteral("wire"))      return VarType::Wire;
-   if (token == QStringLiteral("wor"))       return VarType::WOr;
-
-   fail(QStringLiteral("invalid var_type '%1'").arg(token));
-}
-
-Reference VcdParser::parseReferenceUntilEnd()
-{
-   // VCD references are often one token, but escaped identifiers and generated
-   // names can be awkward. Collect everything up to standalone $end, then parse
-   // a trailing [N] or [M:N] if present.
-   skipWhitespace();
-
-   QString text;
-   while (!eof()) {
-      if (peek() == QLatin1Char('$')) {
-         const QString token = readRawTokenFromCurrentPosition();
-         if (token == QStringLiteral("$end")) {
-            // Keep $end consumed; caller's expectKeyword("$end") would be wrong.
-            // To maintain the simple call pattern, stash it as a peeked token.
-            m_peekedToken = token;
-            m_hasPeekedToken = true;
-            break;
-         }
-         text.append(token);
-         continue;
-      }
-
-      text.append(get());
-   }
-
-   trimRight(text);
-   trimLeft(text);
-
-   if (text.isEmpty()) {
-      fail(QStringLiteral("expected reference"));
-   }
-
-   Reference ref;
-
-   const qsizetype open  = text.lastIndexOf(QLatin1Char('['));
-   const qsizetype close = text.lastIndexOf(QLatin1Char(']'));
-
-   if (open >= 0 && close == text.size() - 1 && open < close) {
-      QString base = text.left(open);
-      trimRight(base);
-
-      const QString inside = text.mid(open + 1, close - open - 1);
-      const qsizetype colon = inside.indexOf(QLatin1Char(':'));
-
-      bool ok = false;
-      int msb = 0;
-      int lsb = 0;
-
-      if (colon < 0) {
-         msb = inside.toInt(&ok, 10);
-         if (!ok) {
-            fail(QStringLiteral("invalid bit select index in reference '%1'").arg(text));
-         }
-         lsb = msb;
-      }
-      else {
-         const QString lhs = inside.left(colon);
-         const QString rhs = inside.mid(colon + 1);
-
-         msb = lhs.toInt(&ok, 10);
-         if (!ok) {
-            fail(QStringLiteral("invalid range in reference '%1'").arg(text));
-         }
-
-         lsb = rhs.toInt(&ok, 10);
-         if (!ok) {
-            fail(QStringLiteral("invalid range in reference '%1'").arg(text));
-         }
-      }
-
-      ref.name     = base;
-      ref.hasRange = true;
-      ref.msb      = msb;
-      ref.lsb      = lsb;
-   }
-   else {
-      ref.name = text;
-   }
-
-   return ref;
-}
-
-Declaration VcdParser::parseDeclarationVersionAfterKeyword()
-{
-   Declaration d;
-   d.kind = Declaration::Kind::Version;
-   d.text = parseTextUntilEnd();
-   return d;
-}
-
-SimulationCommand VcdParser::parseSimulationCommand()
-{
-   skipWhitespace();
-
-   if (peek() == QLatin1Char('#')) {
-      return parseSimulationTime();
-   }
-
-   if (isValueChangeStart(peek()) && peek() != QLatin1Char('$')) {
-      return parseSimulationValueChange();
-   }
-
-   const QString keyword = parseTokenFromPeekBufferOrInput();
-
-   if (keyword == QStringLiteral("$dumpall"))  return parseDumpCommand(SimulationCommand::Kind::DumpAll);
-   if (keyword == QStringLiteral("$dumpoff"))  return parseDumpCommand(SimulationCommand::Kind::DumpOff);
-   if (keyword == QStringLiteral("$dumpon"))   return parseDumpCommand(SimulationCommand::Kind::DumpOn);
-   if (keyword == QStringLiteral("$dumpvars")) return parseDumpCommand(SimulationCommand::Kind::DumpVars);
-   if (keyword == QStringLiteral("$comment"))  return parseSimulationCommentAfterKeyword();
-
-   fail(QStringLiteral("expected simulation command, got '%1'").arg(keyword));
-}
-
-SimulationCommand VcdParser::parseDumpCommand(SimulationCommand::Kind kind)
-{
-   SimulationCommand c;
-   c.kind = kind;
-
-   skipWhitespace();
-
-   if (startsWithAnyKeyword({QStringLiteral("$end")})) {
-      fail(QStringLiteral("dump command requires at least one value_change"));
-   }
-
-   while (!eof()) {
-      skipWhitespace();
-
-      if (startsWithAnyKeyword({QStringLiteral("$end")})) {
-         expectKeyword(QStringLiteral("$end"));
-         break;
-      }
-
-      c.dumpChanges.push_back(parseValueChange());
-   }
-
-   if (c.dumpChanges.isEmpty()) {
-      fail(QStringLiteral("dump command requires at least one value_change"));
-   }
-
-   return c;
-}
-
-SimulationCommand VcdParser::parseSimulationCommentAfterKeyword()
-{
-   SimulationCommand c;
-   c.kind = SimulationCommand::Kind::Comment;
-   c.comment = parseTextUntilEnd();
-   return c;
-}
-
-SimulationCommand VcdParser::parseSimulationTime()
-{
-   SimulationCommand c;
-   c.kind = SimulationCommand::Kind::Time;
-   c.time = parseUnsigned64AfterHash();
-   return c;
-}
-
-SimulationCommand VcdParser::parseSimulationValueChange()
-{
-   SimulationCommand c;
-   c.kind = SimulationCommand::Kind::ValueChange;
-   c.valueChange = parseValueChange();
-   return c;
-}
-
-ValueChange VcdParser::parseValueChange()
-{
-   skipWhitespace();
-
-   const QChar c = peek();
-   if (c == QLatin1Char('0') ||
-       c == QLatin1Char('1') ||
-       c == QLatin1Char('x') ||
-       c == QLatin1Char('X') ||
-       c == QLatin1Char('z') ||
-       c == QLatin1Char('Z')) {
-      return parseScalarValueChange();
-   }
-
-   if (c == QLatin1Char('b') ||
-       c == QLatin1Char('B') ||
-       c == QLatin1Char('r') ||
-       c == QLatin1Char('R')) {
-      return parseVectorOrRealValueChange();
-   }
-
-   fail(QStringLiteral("expected value_change"));
-}
-
-ValueChange VcdParser::parseScalarValueChange()
-{
-   ValueChange vc;
-   vc.value = get();
-
-   QString id;
-   while (!eof() && !isWhitespace(peek())) {
-      id.append(get());
-   }
-
-   if (id.isEmpty()) {
-      fail(QStringLiteral("expected identifier_code after scalar value"));
-   }
-
-   vc.idCode = id;
-   return vc;
-}
-
-ValueChange VcdParser::parseVectorOrRealValueChange()
-{
-   ValueChange vc;
-   vc.radix = get();
-
-   QString value;
-   while (!eof() && !isWhitespace(peek())) {
-      value.append(get());
-   }
-
-   if (value.isEmpty()) {
-      fail(QStringLiteral("expected value text after vector/real value prefix"));
-   }
-
-   vc.value = value;
-   vc.idCode = parseTokenFromPeekBufferOrInput();
-
-   if (vc.idCode.isEmpty()) {
-      fail(QStringLiteral("expected identifier_code after vector/real value"));
-   }
-
-   return vc;
-}
-
-// -----------------------------------------------------------------------------
-// Small helpers
-// -----------------------------------------------------------------------------
-
-inline QString toString(TimeUnit unit)
-{
-   switch (unit) {
-   case TimeUnit::S:  return QStringLiteral("s");
-   case TimeUnit::Ms: return QStringLiteral("ms");
-   case TimeUnit::Us: return QStringLiteral("us");
-   case TimeUnit::Ns: return QStringLiteral("ns");
-   case TimeUnit::Ps: return QStringLiteral("ps");
-   case TimeUnit::Fs: return QStringLiteral("fs");
-   }
-   return QStringLiteral("?");
-}
-
-inline QString toString(ScopeType type)
-{
-   switch (type) {
-   case ScopeType::Begin:    return QStringLiteral("begin");
-   case ScopeType::Fork:     return QStringLiteral("fork");
-   case ScopeType::Function: return QStringLiteral("function");
-   case ScopeType::Module:   return QStringLiteral("module");
-   case ScopeType::Task:     return QStringLiteral("task");
-   }
-   return QStringLiteral("?");
-}
-
-inline QString toString(VarType type)
-{
-   switch (type) {
-   case VarType::Event:     return QStringLiteral("event");
-   case VarType::Integer:   return QStringLiteral("integer");
-   case VarType::Parameter: return QStringLiteral("parameter");
-   case VarType::Real:      return QStringLiteral("real");
-   case VarType::Realtime:  return QStringLiteral("realtime");
-   case VarType::Reg:       return QStringLiteral("reg");
-   case VarType::Supply0:   return QStringLiteral("supply0");
-   case VarType::Supply1:   return QStringLiteral("supply1");
-   case VarType::Time:      return QStringLiteral("time");
-   case VarType::Tri:       return QStringLiteral("tri");
-   case VarType::TriAnd:    return QStringLiteral("triand");
-   case VarType::TriOr:     return QStringLiteral("trior");
-   case VarType::TriReg:    return QStringLiteral("trireg");
-   case VarType::Tri0:      return QStringLiteral("tri0");
-   case VarType::Tri1:      return QStringLiteral("tri1");
-   case VarType::WAnd:      return QStringLiteral("wand");
-   case VarType::Wire:      return QStringLiteral("wire");
-   case VarType::WOr:       return QStringLiteral("wor");
-   }
-   return QStringLiteral("?");
-}
-

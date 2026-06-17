@@ -1,41 +1,67 @@
 #include "prism.h"
 #include "ui_prism.h"
+#include "vcd_parser.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QDir>
 #include <QJsonDocument>
 #include <QShortcut>
+#include <QFileDialog>
+#include <QMessageBox>
 
-Prism::Prism(QWidget* parent) : QMainWindow(parent), ui(new Ui::prism)
+Prism::Prism(QWidget* parent) : QMainWindow(parent), m_ui(new Ui::prism)
 {
-   ui->setupUi(this);
+   m_ui->setupUi(this);
 
-   auto* waveTab = new WaveformViewWidget(this);
+   connect(m_ui->m_open, &QAction::triggered,
+           this,         &Prism::loadWaveform);
 
-   ui->m_waveformTab->addTab(waveTab, "Waveform 1");
-
-   connect(ui->m_save_format, &QAction::triggered,
+   connect(m_ui->m_save_format, &QAction::triggered,
            this, [this]()
            {
               saveWaveLayout("wave_layout.json");
            });
 
-   connect(ui->m_load_format, &QAction::triggered,
+   connect(m_ui->m_load_format, &QAction::triggered,
            this, [this]()
            {
               loadWaveLayout("wave_layout.json");
            });
-
 }
 
 Prism::~Prism()
 {
-   delete ui;
+   delete m_ui;
+}
+
+void Prism::loadWaveform ()
+{
+   QString filename = QFileDialog::getOpenFileName(this, tr("Open Waveform File"), QDir::currentPath(), QString("VCD (*.vcd)"));
+   if (filename.isEmpty()) return;
+
+   QFile vcd(filename);
+   if (!vcd.open(QFile::ReadOnly)) {
+      QMessageBox::critical(this, tr("File Open Error"), QString("Cannot open file %1 for reading").arg(filename));
+      return;
+   }
+
+   QTextStream vcd_stream(&vcd);
+   VcdParser p(vcd_stream);
+   connect(&p, SIGNAL(message(MessageType,QString,QString,int,int)), this, SLOT(printMessage(MessageType, QString, QString, int, int)));
+   connect(&p, SIGNAL(message(MessageType,QString)), this, SLOT(printMessage(MessageType, QString)));
+   std::unique_ptr<WaveformDocument> document = p.parse();
+
+   document->dump();
+
+   auto* waveTab = new WaveformViewWidget(this);
+   m_ui->m_waveformTab->addTab(waveTab, QFileInfo(filename).fileName());
+   waveTab->loadDocument(std::move(document));
 }
 
 void Prism::saveWaveLayout(const QString& filename)
 {
-   WaveformViewWidget* view = qobject_cast<WaveformViewWidget*>(ui->m_waveformTab->currentWidget());
+   WaveformViewWidget* view = qobject_cast<WaveformViewWidget*>(m_ui->m_waveformTab->currentWidget());
    if (!view)
       return;
 
@@ -52,7 +78,7 @@ void Prism::saveWaveLayout(const QString& filename)
 
 void Prism::loadWaveLayout(const QString& filename)
 {
-   WaveformViewWidget* view = qobject_cast<WaveformViewWidget*>(ui->m_waveformTab->currentWidget());
+   WaveformViewWidget* view = qobject_cast<WaveformViewWidget*>(m_ui->m_waveformTab->currentWidget());
    if (!view)
       return;
 

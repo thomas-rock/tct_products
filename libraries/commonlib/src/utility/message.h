@@ -3,6 +3,7 @@
 // message types
 typedef int             MessageType;
 
+#define SysDebug        0x00000001
 #define SysStatus       0x00000002
 #define SysInfo         0x00000004
 #define SysWarning      0x00000008

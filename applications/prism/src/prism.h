@@ -1,7 +1,10 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QString>
+
 #include "waveform_view_widget.h"
+#include "message.h"
 
 namespace Ui {
    class prism;
@@ -16,11 +19,15 @@ class Prism : public QMainWindow
                      ~Prism();
 
    protected slots:
+      void           loadWaveform ();
       void           saveWaveLayout(const QString& filename);
       void           loadWaveLayout(const QString& filename);
 
+      void           printMessage(MessageType type, QString msg, QString filename, int line, int col) {qDebug().noquote() << QString("%1 (%2 %3 : %4)").arg(msg).arg(filename).arg(line).arg(col);}
+      void           printMessage(MessageType type, QString msg) {qDebug().noquote() << QString("%1").arg(msg);}
+
    private:
-      Ui::prism*     ui;
+      Ui::prism*     m_ui;
 };
 
 /*

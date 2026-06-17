@@ -38,6 +38,11 @@ struct WaveSegment
       : startTime(start), endTime(end), value(v)
    {
    }
+
+   void dump (int indent) const
+   {
+      qDebug().noquote() << QString("%1start: %2, end: %3, value: %4").arg(QString(indent, ' ')).arg(startTime).arg(endTime).arg(value);
+   }
 };
 
 class WaveSignal
@@ -63,64 +68,32 @@ class WaveSignal
            width(w),
            kind(k)
       {
-         finalizePath();
-      }
-
-      void finalizePath()
-      {
-         if (scopePath.isEmpty())
-            fullPath = name;
-         else
-            fullPath = scopePath + "." + name;
+         fullPath = (scopePath.isEmpty()) ? name : scopePath + "." + name;
       }
 
       QString valueAtTime(qreal time) const
       {
-         for (const auto& seg : segments)
-         {
-            if (time >= seg.startTime && time < seg.endTime)
-               return seg.value;
-         }
-         return {};
+         const WaveSegment* seg = segmentAtTime(time);
+         return seg ? seg->value : QString{};
       }
 
       qreal nearestEdgeTime(qreal time, qreal maxDistance = -1.0) const
       {
-         bool found = false;
-         qreal bestTime = time;
-         qreal bestDist = 0.0;
-
-         for (int i = 0; i < segments.size(); ++i)
-         {
-            const auto& seg = segments[i];
-
-            {
-               const qreal t = seg.startTime;
-               const qreal dist = std::abs(t - time);
-
-               if (!found || dist < bestDist)
-               {
-                  found = true;
-                  bestDist = dist;
-                  bestTime = t;
-               }
-            }
-
-            {
-               const qreal t = seg.endTime;
-               const qreal dist = std::abs(t - time);
-
-               if (!found || dist < bestDist)
-               {
-                  found = true;
-                  bestDist = dist;
-                  bestTime = t;
-               }
-            }
-         }
-
-         if (!found)
+         const WaveSegment* seg = segmentAtTime(time);
+         if (!seg)
             return time;
+
+         const qreal startDist = std::abs(time - seg->startTime);
+         const qreal endDist   = std::abs(seg->endTime - time);
+
+         qreal bestTime = seg->endTime;
+         qreal bestDist = endDist;
+
+         if (startDist < endDist)
+         {
+            bestTime = seg->startTime;
+            bestDist = startDist;
+         }
 
          if (maxDistance >= 0.0 && bestDist > maxDistance)
             return time;
@@ -128,12 +101,37 @@ class WaveSignal
          return bestTime;
       }
 
+      // do a binary search to find a segment at the given time
+      const WaveSegment* segmentAtTime(qreal time) const
+      {
+         int lo = 0;
+         int hi = segments.size() - 1;
+
+         while (lo <= hi)
+         {
+            const int mid           = lo + (hi - lo) / 2;
+            const WaveSegment& seg  = segments[mid];
+
+            if (time < seg.startTime)
+               hi = mid - 1;
+            else if (time >= seg.endTime)
+               lo = mid + 1;
+            else
+               return &seg;
+         }
+         return nullptr;
+      }
+
       qreal endTime() const
       {
-         qreal t = 0.0;
-         for (const auto& seg : segments)
-            t = std::max(t, seg.endTime);
-         return t;
+         return segments.last().endTime;
+      }
+
+      void dump (int indent = 0) const
+      {
+         qDebug().noquote() << QString("%1name: %2, fullPath: %3, width: %4").arg(QString(indent, ' '), name, fullPath).arg(width);
+         for (const auto& segment : segments)
+            segment.dump(indent);
       }
 };
 
@@ -434,6 +432,13 @@ class DesignNode
 
       explicit                            DesignNode(const QString& n = {}, const QString& p = {}) : name(n), fullPath(p) {}
 
+      void                                dump (int indent = 0)
+      {
+         qDebug().noquote() << QString("%1name: %2, fullPath: %3").arg(QString(indent, ' '), name, fullPath);
+         qDebug().noquote() << QString("%1Children:").arg(QString(indent, ' '));
+         for (auto& dn : children)
+            dn->dump(indent+3);
+      }
 };
 
 class WaveformDocument
@@ -513,5 +518,16 @@ class WaveformDocument
          for (const auto& sig : signalList)
             t = std::max(t, sig->endTime());
          return t;
+      }
+
+      void dump () const
+      {
+         qDebug().noquote() << "Design Nodes:";
+         for (const auto& dn: hierarchyRoots)
+            dn->dump(3);
+
+         qDebug().noquote() << "Signals";
+         for (const auto& sig : signalList)
+            sig->dump(3);
       }
 };

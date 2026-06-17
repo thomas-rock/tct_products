@@ -225,9 +225,6 @@ void WaveformViewWidget::connectUi()
            this,
            &WaveformViewWidget::doFind);
 
-
-
-
 }
 
 void WaveformViewWidget::configureWaveNameTreeForReorder()
@@ -270,14 +267,14 @@ void WaveformViewWidget::populateDemoData()
       {42.0, 62.0, "11110000"}
    };
 
-   auto* sigTx = document->createSignal("tx_data", WaveSignalKind::Bus, 8, "u_uart");
+   auto* sigTx = document->createSignal("tx_data", WaveSignalKind::Bus, 8, "top.u_uart");
    sigTx->segments = {
       {0.0, 12.0, "01010101"},
       {12.0, 24.0, "10100001"},
       {24.0, 36.0, "01011010"}
    };
 
-   auto* sigRx = document->createSignal("rx_data", WaveSignalKind::Bus, 8, "u_uart");
+   auto* sigRx = document->createSignal("rx_data", WaveSignalKind::Bus, 8, "top.u_uart");
    sigRx->segments = {
       {0.0, 14.0, "00110011"},
       {14.0, 28.0, "11001100"},
@@ -300,7 +297,8 @@ void WaveformViewWidget::populateDemoData()
    sigRx->style.textColor = QColor(173, 216, 230);
 
    auto* topNode = document->createDesignNode("top", "top");
-   auto* uartNode = document->createDesignNode("u_uart", "u_uart");
+   auto* uartNode = document->createDesignNode("u_uart", "top.u_uart");
+   topNode->children.push_back(uartNode);
 
    topNode->signalList.push_back(sigClk);
    topNode->signalList.push_back(sigRst);
@@ -310,9 +308,11 @@ void WaveformViewWidget::populateDemoData()
    uartNode->signalList.push_back(sigRx);
 
    document->addHierarchyRoot(topNode);
-   document->addHierarchyRoot(uartNode);
+//   qDebug().noquote() << "Demo data";
+//   document->dump();
+//   document->addHierarchyRoot(uartNode);
 
-   loadDocument(std::move(document));
+//   loadDocument(std::move(document));
 }
 
 void WaveformViewWidget::loadDocument(std::unique_ptr<WaveformDocument> document)

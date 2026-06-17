@@ -39,12 +39,12 @@ value_change_dump_definitions
 declaration_command
    : vcd_declaration_comment
    | vcd_declaration_date
-   | vcd_declaration_enddefinitions
    | vcd_declaration_scope
    | vcd_declaration_timescale
    | vcd_declaration_upscope
    | vcd_declaration_vars
    | vcd_declaration_version
+   | vcd_declaration_enddefinitions
    ;
 
 vcd_declaration_comment
@@ -172,259 +172,106 @@ identifier_code
 #pragma once
 
 #include "waveform_model.h"
+#include "message.h"
 
 #include <QChar>
 #include <QException>
 #include <QString>
 #include <QTextStream>
 #include <QVector>
+#include <QStack>
 
-#include <stdexcept>
-
-namespace vcd
+struct SignalBuildState
 {
+   bool                 hasValue = false;
+   WaveSignal*          signal;
+   QString              currentValue;
+   qreal                currentStartTime;
+};
 
-   // -----------------------------------------------------------------------------
-   // Model
-   // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// Parser
+// -----------------------------------------------------------------------------
 
-   enum class ScopeType
-   {
-      Begin,
-      Fork,
-      Function,
-      Module,
-      Task
-   };
+class VcdParser : public QObject
+{
+   Q_OBJECT
 
-   enum class VarType
-   {
-      Event,
-      Integer,
-      Parameter,
-      Real,
-      Realtime,
-      Reg,
-      Supply0,
-      Supply1,
-      Time,
-      Tri,
-      TriAnd,
-      TriOr,
-      TriReg,
-      Tri0,
-      Tri1,
-      WAnd,
-      Wire,
-      WOr
-   };
+   public:
+      explicit          VcdParser(QTextStream& in);
 
-   enum class TimeUnit
-   {
-      S,
-      Ms,
-      Us,
-      Ns,
-      Ps,
-      Fs
-   };
+      std::unique_ptr<WaveformDocument>   parse();
+      int               errors () {return m_errors;}
+      int               warnings () {return m_warnings;}
 
-   struct SourceLocation
-   {
-      qsizetype offset = 0;
-      qsizetype line   = 1;
-      qsizetype column = 1;
-   };
+   signals:
+      void              message (MessageType type, const QString& msg, const QString& file, int line, int col);
+      void              message (MessageType type, const QString& msg);
 
-   class ParseError : public std::runtime_error
-   {
-      public:
-         SourceLocation    loc;
+   private:
+      void              parseDeclarationCommands ();
+      void              parseSimulationCommands ();
 
-                           ParseError(SourceLocation where, const QString& msg);
-
-         static QString    format(SourceLocation where, const QString& msg);
-   };
-
-   struct Reference
-   {
-      QString name;
-      bool    hasRange = false;
-      int     msb      = 0;
-      int     lsb      = 0;
-
-      bool isBitSelect() const { return hasRange && msb == lsb; }
-   };
-
-   struct ScopeDecl
-   {
-      ScopeType type;
-      QString   identifier;
-   };
-
-   struct VarDecl
-   {
-      VarType   type;
-      int       size = 0;
-      QString   idCode;
-      Reference reference;
-   };
-
-   struct TimescaleDecl
-   {
-      int      number = 1;
-      TimeUnit unit   = TimeUnit::Ns;
-   };
-
-   struct Declaration
-   {
-      enum class Kind
-      {
-         Comment,
-         Date,
-         EndDefinitions,
-         Scope,
-         Timescale,
-         Upscope,
-         Var,
-         Version
-      };
-
-      Kind          kind = Kind::Comment;
-      QString       text;
-      ScopeDecl     scope;
-      TimescaleDecl timescale;
-      VarDecl       var;
-   };
-
-   struct ValueChange
-   {
-      QChar             radix;      // b/B/r/R
-      QString           value;
-      QString           idCode;
-   };
-
-   struct SimulationCommand
-   {
-      enum class Kind
-      {
-         DumpAll,
-         DumpOff,
-         DumpOn,
-         DumpVars,
-         Comment,
-         Time,
-         ValueChange
-      };
-
-      Kind                 kind = Kind::Comment;
-      QString              comment;
-      quint64              time = 0;
-      ValueChange          valueChange;
-      QVector<ValueChange> dumpChanges;
-   };
-
-   // -----------------------------------------------------------------------------
-   // Parser
-   // -----------------------------------------------------------------------------
-
-   class VcdParser
-   {
-      public:
-         explicit          VcdParser(QTextStream& in);
-
-         std::unique_ptr<WaveformDocument>   parse();
-
-      private:
-         void              processDirectiveLine(const QString& line);
-         void              processValueChangeLine(const QString& line);
+      // declaration command parse functions
+      void              parseComment ();
+      void              parseDate ();
+      void              parseScope ();
+      void              parseTimescale ();
+      void              parseUpscope ();
+      void              parseVar ();
+      void              parseVersion ();
+      void              parseEndDefinition ();
 
 
-      SourceLocation    loc() const;
-         [[noreturn]] void fail(const QString& msg) const;
+      // simulation command parse functions
+      void              parseDumpall();
+      void              parseDumpoff();
+      void              parseDumpon();
+      void              parseDumpvars();
+      void              parseSimulationTime();
+      void              parseValueChange();
+      void              parseValueChangeUntilEnd();
 
-         static bool       isWhitespace(QChar c);
-         static bool       isDigit(QChar c);
-         bool              eof();
-         QChar             peek();
-         QChar             get();
-         void              skipWhitespace();
-         QString           parseToken();
-         QString           readRawTokenFromCurrentPosition();
-         bool              nextTokenIs(const QString& keyword);
-         void              expectKeyword(const QString& keyword);
-         void              expectChar(QChar expected);
-         int               parseDecimalNumber();
-         quint64           parseUnsigned64AfterHash();
 
-         // Reads text until a standalone $end token. The $end token is consumed.
-         QString           parseTextUntilEnd();
-         static void       trimRight(QString& s);
-         static void       trimLeft(QString& s);
-         bool              isDeclarationCommandToken(const QString& token) const;
-         bool              isSimulationCommandToken(const QString& token) const;
-         bool              isDeclarationCommandStart();
-         bool              isSimulationCommandStart();
-         bool              startsWithAnyKeyword(const QVector<QString>& keywords);
+      // low-level parse functions
+      QString           parseTextUntilEnd();
+      void              expectKeyword(const QString& keyword);
+      int               parseDecimalNumber();
+      quint64           parseTimeValue();
 
-         QString           peekToken();
-         QString           parseTokenFromPeekBufferOrInput();
-         QString           parseTokenRawNoPeekToken();
 
-         static bool       isValueChangeStart(QChar c);
-         Declaration       parseDeclarationCommand();
-         Declaration       parseDeclarationCommentAfterKeyword();
-         Declaration       parseDeclarationDateAfterKeyword();
-         Declaration       parseDeclarationEndDefinitionsAfterKeyword();
-         Declaration       parseDeclarationScopeAfterKeyword();
-         ScopeType         parseScopeType();
-         Declaration       parseDeclarationTimescaleAfterKeyword();
-         int               parseTimeNumber();
-         TimeUnit          parseTimeUnit();
-         Declaration       parseDeclarationUpscopeAfterKeyword();
-         Declaration       parseDeclarationVarAfterKeyword();
-         VarType           parseVarType();
-         Reference         parseReferenceUntilEnd();
-         Declaration       parseDeclarationVersionAfterKeyword();
-         SimulationCommand parseSimulationCommand();
-         SimulationCommand parseDumpCommand(SimulationCommand::Kind kind);
-         SimulationCommand parseSimulationCommentAfterKeyword();
-         SimulationCommand parseSimulationTime();
-         SimulationCommand parseSimulationValueChange();
-         ValueChange       parseValueChange();
-         ValueChange       parseScalarValueChange();
-         ValueChange       parseVectorOrRealValueChange();
+      // tokenizer functions
+      void              skipWhitespace();
+      QString           parseToken();
+      bool              eof();
+      QChar             peek();
+      QChar             get();
 
-         QTextStream&      m_in;
+      // utility functions
+      void              debugMessage (const QString& msg, bool noloc = false);
+      void              errorMessage (const QString& msg, bool noloc = false);
+      void              warningMessage (const QString& msg, bool noloc = false);
+      void              infoMessage (const QString& msg, bool noloc = false);
 
-         bool              m_hasLookahead    = false;
-         QChar             m_lookahead;
-         qsizetype         m_offset          = 0;
-         qsizetype         m_line            = 1;
-         qsizetype         m_column          = 1;
+      // status variables
+      int               m_errors;
+      int               m_warnings;
 
-         QString           m_peekedToken;
-         bool              m_hasPeekedToken  = false;
+      // parsing variables
+      QTextStream&      m_in;
+      QString           m_filename;
+      bool              m_in_definitions;
+      bool              m_hasLookahead    = false;
+      QChar             m_lookahead;
+      int               m_offset          = 0;
+      int               m_line            = 1;
+      int               m_column          = 1;
 
-         std::unique_ptr<WaveformDocument>      m_document;
-         QStringList                            m_scopeStack;
-         qreal                                  m_currentTime= 0.0;
-         qreal                                  m_lastTime= 0.0;
-         QHash<QString, VarDecl>                m_varsById;
-         QHash<QString, QVector<ParsedChange>>  m_changesById;
-         QHash<QString, DesignNode*>            m_designNodeByPath;
-
-         qreal                                  m_timescaleFactor = 1.0; // converts VCD time ? nanoseconds
-
-   };
-
-   // -----------------------------------------------------------------------------
-   // Small helpers
-   // -----------------------------------------------------------------------------
-
-   inline QString toString(TimeUnit unit);
-   inline QString toString(ScopeType type);
-   inline QString toString(VarType type);
-
-} // namespace vcd
-
+      // document processing variables
+      std::unique_ptr<WaveformDocument>   m_document;
+      QStack<DesignNode*>                 m_scopeStack;
+      qreal                               m_currentTime     = 0.0;
+      qreal                               m_timescaleFactor = 1.0;
+      QHash<QString, int>                 m_idToIndex;
+      QVector<SignalBuildState>           m_signals;
+};
