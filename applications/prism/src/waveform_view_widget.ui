@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WaveformViewWidget</class>
+ <widget class="QWidget" name="WaveformViewWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1155</width>
+    <height>627</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_6">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QSplitter" name="m_mainSplitter">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <widget class="QSplitter" name="m_leftSplitter">
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <widget class="QGroupBox" name="m_hierarchyGroup">
+       <property name="styleSheet">
+        <string notr="true">QGroupBox::title  {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 4px 8000px 4px 8000px;
+    background-color: #FF17365D;
+    color: rgb(255, 255, 255);
+}</string>
+       </property>
+       <property name="title">
+        <string>Hierarchy</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>7</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="SignalTreeWidget" name="m_hierarchyTree">
+          <attribute name="headerVisible">
+           <bool>false</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string notr="true">1</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QGroupBox" name="m_scopeSignalGroup">
+       <property name="styleSheet">
+        <string notr="true">QGroupBox::title  {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 4px 8000px 4px 8000px;
+    background-color: #FF17365D;
+    color: rgb(255, 255, 255);
+}</string>
+       </property>
+       <property name="title">
+        <string>Signals</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>7</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="SignalTreeWidget" name="m_scopeSignalTree">
+          <attribute name="headerVisible">
+           <bool>false</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string notr="true">1</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="m_waveDisplayGroup">
+      <property name="styleSheet">
+       <string notr="true">QGroupBox::title  {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 4px 8000px 4px 8000px;
+    background-color: #FF17365D;
+    color: rgb(255, 255, 255);
+}</string>
+      </property>
+      <property name="title">
+       <string>Waveforms</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>7</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="m_rightSplitter">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <widget class="QWidget" name="m_waveNamePane" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="SignalTreeWidget" name="m_waveNameTree">
+             <property name="uniformRowHeights">
+              <bool>true</bool>
+             </property>
+             <property name="allColumnsShowFocus">
+              <bool>true</bool>
+             </property>
+             <property name="columnCount">
+              <number>3</number>
+             </property>
+             <attribute name="headerVisible">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="headerStretchLastSection">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string notr="true">1</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string notr="true">2</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string notr="true">3</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="m_waveNameBottomSpacer" native="true"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="m_rightPane" native="true">
+          <layout class="QVBoxLayout" name="m_rightLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="WaveDisplayWidget" name="m_waveDisplay" native="true"/>
+           </item>
+           <item>
+            <widget class="CursorTrackWidget" name="m_cursorTrack" native="true"/>
+           </item>
+           <item>
+            <widget class="TimeRulerWidget" name="m_timeRuler" native="true"/>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SignalTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>signal_tree_widget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WaveDisplayWidget</class>
+   <extends>QWidget</extends>
+   <header>wave_display_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CursorTrackWidget</class>
+   <extends>QWidget</extends>
+   <header>cursor_track_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TimeRulerWidget</class>
+   <extends>QWidget</extends>
+   <header>time_ruler_widget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -67,7 +67,7 @@ ArtiGui::ArtiGui(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::ArtiGui)
               this,  &ArtiGui::setMode);
 
    // style mode buttons
-   QFile styleFile(":/styles/modeButton.txt");
+   QFile styleFile(":/styles/modeButton.qss");
    if (styleFile.open(QIODevice::ReadOnly)) {
       QTextStream s(&styleFile);
       QString style = s.readAll();

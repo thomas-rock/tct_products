@@ -20,6 +20,9 @@
 
 class QTreeWidgetItem;
 
+namespace Ui {
+   class WaveformViewWidget;
+}
 class WaveformViewWidget : public QWidget
 {
    Q_OBJECT
@@ -128,6 +131,9 @@ class WaveformViewWidget : public QWidget
       std::unique_ptr<DisplayNode> makeSignalDisplayNode(WaveSignal* sig,
                                                          bool standaloneBitNames = false) const;
    private:
+      Ui::WaveformViewWidget* m_ui;
+
+
       QSplitter*              m_mainSplitter {nullptr};
 
       QWidget*                m_leftPane {nullptr};

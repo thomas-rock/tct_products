@@ -1,4 +1,5 @@
 #include "waveform_view_widget.h"
+#include "ui_waveform_view_widget.h"
 #include "signal_tree_widget.h"
 #include "wave_query_ast.h"
 #include "wave_query_parser.h"
@@ -19,7 +20,7 @@
 #include <functional>
 
 WaveformViewWidget::WaveformViewWidget(QWidget* parent)
-   : QWidget(parent)
+   : QWidget(parent), m_ui(new Ui::WaveformViewWidget)
 {
    buildUi();
    connectUi();
@@ -32,86 +33,88 @@ WaveformViewWidget::WaveformViewWidget(QWidget* parent)
 
 void WaveformViewWidget::buildUi()
 {
-   auto* topLayout = new QVBoxLayout(this);
-   topLayout->setContentsMargins(0, 0, 0, 0);
-   topLayout->setSpacing(0);
+   m_ui->setupUi(this);
 
-   m_mainSplitter = new QSplitter(Qt::Horizontal, this);
-   topLayout->addWidget(m_mainSplitter);
+   // auto* topLayout = new QVBoxLayout(this);
+   // topLayout->setContentsMargins(0, 0, 0, 0);
+   // topLayout->setSpacing(0);
 
-   m_leftPane = new QWidget(m_mainSplitter);
-   m_leftLayout = new QVBoxLayout(m_leftPane);
-   m_leftLayout->setContentsMargins(0, 0, 0, 0);
-   m_leftLayout->setSpacing(0);
+   m_mainSplitter = m_ui->m_mainSplitter;
+   // topLayout->addWidget(m_mainSplitter);
 
-   m_leftSplitter = new QSplitter(Qt::Vertical, m_leftPane);
+   // m_leftPane = new QWidget(m_mainSplitter);
+   // m_leftLayout = new QVBoxLayout(m_leftPane);
+   // m_leftLayout->setContentsMargins(0, 0, 0, 0);
+   // m_leftLayout->setSpacing(0);
 
-   m_hierarchyTree = new SignalTreeWidget(m_leftSplitter);
+   m_leftSplitter = m_ui->m_leftSplitter;
+
+   m_hierarchyTree = m_ui->m_hierarchyTree;
    m_hierarchyTree->setColumnCount(1);
-   m_hierarchyTree->setHeaderLabels({"Hierarchy"});
+   // m_hierarchyTree->setHeaderLabels({"Hierarchy"});
 
-   m_scopeSignalTree = new SignalTreeWidget(m_leftSplitter);
+   m_scopeSignalTree = m_ui->m_scopeSignalTree;
    m_scopeSignalTree->setColumnCount(1);
-   m_scopeSignalTree->setHeaderLabels({"Signals"});
+   // m_scopeSignalTree->setHeaderLabels({"Signals"});
    m_scopeSignalTree->setDragEnabled(true);
    m_scopeSignalTree->setDragDropMode(QAbstractItemView::DragOnly);
    m_scopeSignalTree->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-   m_leftSplitter->addWidget(m_hierarchyTree);
-   m_leftSplitter->addWidget(m_scopeSignalTree);
+   // m_leftSplitter->addWidget(m_hierarchyTree);
+   // m_leftSplitter->addWidget(m_scopeSignalTree);
    m_leftSplitter->setStretchFactor(0, 1);
    m_leftSplitter->setStretchFactor(1, 1);
 
-   m_leftLayout->addWidget(m_leftSplitter);
+   // m_leftLayout->addWidget(m_leftSplitter);
 
-   m_rightSplitter = new QSplitter(Qt::Horizontal, m_mainSplitter);
+   m_rightSplitter = m_ui->m_rightSplitter;
 
-   m_waveNamePane = new QWidget(m_rightSplitter);
-   m_waveNameLayout = new QVBoxLayout(m_waveNamePane);
-   m_waveNameLayout->setContentsMargins(0, 0, 0, 0);
-   m_waveNameLayout->setSpacing(0);
+   m_waveNamePane = m_ui->m_waveNamePane;
+   // m_waveNameLayout = new QVBoxLayout(m_waveNamePane);
+   // m_waveNameLayout->setContentsMargins(0, 0, 0, 0);
+   // m_waveNameLayout->setSpacing(0);
 
-   m_waveNameTree = new SignalTreeWidget(m_waveNamePane);
+   m_waveNameTree = m_ui->m_waveNameTree;
    m_waveNameTree->setColumnCount(3);
    m_waveNameTree->setHeaderLabels({"Waves", "Value", "Radix"});
 
-   m_waveNameBottomSpacer = new QWidget(m_waveNamePane);
+   m_waveNameBottomSpacer = m_ui->m_waveNameBottomSpacer;
 
-   m_waveNameLayout->addWidget(m_waveNameTree);
-   m_waveNameLayout->addWidget(m_waveNameBottomSpacer);
+   // m_waveNameLayout->addWidget(m_waveNameTree);
+   // m_waveNameLayout->addWidget(m_waveNameBottomSpacer);
 
-   m_rightPane = new QWidget(m_rightSplitter);
-   m_rightLayout = new QVBoxLayout(m_rightPane);
-   m_rightLayout->setContentsMargins(0, 0, 0, 0);
-   m_rightLayout->setSpacing(0);
+   m_rightPane = m_ui->m_rightPane;
+   m_rightLayout = m_ui->m_rightLayout;
+   // m_rightLayout->setContentsMargins(0, 0, 0, 0);
+   // m_rightLayout->setSpacing(0);
 
-   m_waveDisplay = new WaveDisplayWidget(m_rightPane);
-   m_waveDisplay->setWaveNameTree(m_waveNameTree);
+   m_waveDisplay = m_ui->m_waveDisplay;
+   m_waveDisplay->setWaveNameTree(m_ui->m_waveNameTree);
    m_waveDisplay->setDisplayNodeMap(&m_waveItemToDisplayNode);
 
-   m_cursorTrack = new CursorTrackWidget(m_rightPane);
+   m_cursorTrack = m_ui->m_cursorTrack;
    m_cursorTrack->setLaneHeight(CursorTrackLaneHeight);
 
-   m_timeRuler = new TimeRulerWidget(m_rightPane);
+   m_timeRuler = m_ui->m_timeRuler;
    m_timeRuler->setPixelsPerUnit(m_pixelsPerUnit);
    m_timeRuler->setSecondsPerUnit(1e-9);
    m_timeRuler->setAutoDisplayUnitEnabled(true);
 
-   m_rightLayout->addWidget(m_waveDisplay);
-   m_rightLayout->addWidget(m_cursorTrack);
-   m_rightLayout->addWidget(m_timeRuler);
+   // m_rightLayout->addWidget(m_waveDisplay);
+   // m_rightLayout->addWidget(m_cursorTrack);
+   // m_rightLayout->addWidget(m_timeRuler);
 
    m_rightLayout->setStretch(0, 1);
    m_rightLayout->setStretch(1, 0);
    m_rightLayout->setStretch(2, 0);
 
-   m_mainSplitter->addWidget(m_leftPane);
-   m_mainSplitter->addWidget(m_rightSplitter);
+   // m_mainSplitter->addWidget(m_leftPane);
+   // m_mainSplitter->addWidget(m_rightSplitter);
    m_mainSplitter->setStretchFactor(0, 0);
    m_mainSplitter->setStretchFactor(1, 1);
 
-   m_rightSplitter->addWidget(m_waveNamePane);
-   m_rightSplitter->addWidget(m_rightPane);
+   // m_rightSplitter->addWidget(m_waveNamePane);
+   // m_rightSplitter->addWidget(m_rightPane);
    m_rightSplitter->setStretchFactor(0, 0);
    m_rightSplitter->setStretchFactor(1, 1);
 

@@ -52,7 +52,7 @@ void Prism::loadWaveform ()
    connect(&p, SIGNAL(message(MessageType,QString)), this, SLOT(printMessage(MessageType, QString)));
    std::unique_ptr<WaveformDocument> document = p.parse();
 
-   document->dump();
+   // document->dump();
 
    auto* waveTab = new WaveformViewWidget(this);
    m_ui->m_waveformTab->addTab(waveTab, QFileInfo(filename).fileName());

@@ -18,6 +18,8 @@
 TOP       = $$PWD/../../..
 DIST      = $$TOP/../distribution
 LIBRARIES = $$TOP/libraries
+ICONS     = $$TOP/resources/icons
+STYLES    = $$TOP/resources/styles
 
 TEMPLATE     = app
 CONFIG      += qt warn_on exceptions debug_and_release c++17
@@ -33,6 +35,13 @@ QT       += core gui widgets
 
 INCLUDEPATH += \
    $$PWD
+
+RESOURCES += \
+   $$ICONS/basic/basic_icons.qrc \
+   $$ICONS/custom/custom_icons.qrc \
+   $$ICONS/development/development_icons.qrc \
+   $$ICONS/word_processing/word_processing_icons.qrc \
+   $$STYLES/styles.qrc
 
 HEADERS += \
    prism.h \
@@ -87,7 +96,8 @@ SOURCES += \
    waveform_view_widget.cpp
 
 FORMS += \
-   prism.ui 
+   prism.ui  \
+   waveform_view_widget.ui
 
 include($$LIBRARIES/commonlib/src/commonlib.pri)
 

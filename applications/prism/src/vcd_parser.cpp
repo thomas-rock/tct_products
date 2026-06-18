@@ -281,10 +281,20 @@ void VcdParser::parseValueChange()
       return;
 
    SignalBuildState& state = m_signals[*it];
+   if (c == 'b' && value.size() < state.signal->width)
+      value.prepend(QString(state.signal->width-value.size(), '0'));
 
    // First value ever seen for this signal.
    if (!state.hasValue)
    {
+      // insert initial segment
+      if (m_currentTime != 0.0) {
+         state.signal->segments.push_back({
+            0.0,
+            m_currentTime,
+            QString(state.signal->width, 'x')
+         });
+      }
       state.currentValue = value;
       state.currentStartTime = m_currentTime;
       state.hasValue = true;

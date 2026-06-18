@@ -1,6 +1,7 @@
 <RCC>
    <qresource prefix="/styles">
-      <file>tabWidget.txt</file>
-      <file>modeButton.txt</file>
+      <file>tabWidget.qss</file>
+      <file>modeButton.qss</file>
+      <file>groupBox.qss</file>
    </qresource>
 </RCC>
