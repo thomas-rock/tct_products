@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>Prism Waveform Explorer</string>
   </property>
+  <property name="iconSize">
+   <size>
+    <width>20</width>
+    <height>20</height>
+   </size>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
@@ -57,6 +63,8 @@
     <addaction name="separator"/>
     <addaction name="m_save_format"/>
     <addaction name="m_load_format"/>
+    <addaction name="separator"/>
+    <addaction name="m_exit"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -90,6 +98,10 @@
    <addaction name="m_zoom_cursors"/>
   </widget>
   <action name="m_open">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/folder_open.png</normaloff>:/basic/folder_open.png</iconset>
+   </property>
    <property name="text">
     <string>Open...</string>
    </property>
@@ -98,6 +110,10 @@
    </property>
   </action>
   <action name="m_close">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/close.png</normaloff>:/basic/close.png</iconset>
+   </property>
    <property name="text">
     <string>Close</string>
    </property>
@@ -106,6 +122,10 @@
    </property>
   </action>
   <action name="m_save_format">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/save.png</normaloff>:/basic/save.png</iconset>
+   </property>
    <property name="text">
     <string>Save Format...</string>
    </property>
@@ -122,6 +142,10 @@
    </property>
   </action>
   <action name="m_zoom_in">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/zoom_in.png</normaloff>:/basic/zoom_in.png</iconset>
+   </property>
    <property name="text">
     <string>Zoom In</string>
    </property>
@@ -130,6 +154,10 @@
    </property>
   </action>
   <action name="m_zoom_out">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/basic/basic_icons.qrc">
+     <normaloff>:/basic/zoom_out.png</normaloff>:/basic/zoom_out.png</iconset>
+   </property>
    <property name="text">
     <string>Zoom Out</string>
    </property>
@@ -153,7 +181,26 @@
     <string>Zoom cursors</string>
    </property>
   </action>
+  <action name="m_exit">
+   <property name="icon">
+    <iconset resource="../../../resources/icons/custom/custom_icons.qrc">
+     <normaloff>:/custom/exit</normaloff>:/custom/exit</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="toolTip">
+    <string>Exit the application</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../../../resources/icons/custom/custom_icons.qrc"/>
+ </resources>
  <connections/>
 </ui>
