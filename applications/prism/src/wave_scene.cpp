@@ -4,6 +4,7 @@
 #include "bit_renderer.h"
 #include "waveform_model.h"
 
+#include <algorithm>
 #include <memory>
 
 WaveScene::WaveScene(QObject* parent)
@@ -165,6 +166,26 @@ void WaveScene::setPixelsPerUnit(qreal pixelsPerUnit)
    }
 
    m_pixelsPerUnit = pixelsPerUnit;
+
+   update();
+}
+
+void WaveScene::setWaveRowWidth(qreal width)
+{
+   for (auto it = m_rows.begin(); it != m_rows.end(); ++it)
+   {
+      WaveTrackItem* track = it.value();
+      if (!track)
+         continue;
+
+      const QPointF pos = track->pos();
+      const QRectF rowRect = track->rowRect();
+
+      track->setRowRect(QRectF(pos.x(),
+                               pos.y(),
+                               std::max<qreal>(0.0, width),
+                               rowRect.height()));
+   }
 
    update();
 }

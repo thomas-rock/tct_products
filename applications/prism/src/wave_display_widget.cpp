@@ -85,9 +85,15 @@ void WaveDisplayWidget::rebuildSceneRect()
    const qreal sceneHeight =
       headerOffset + std::max<qreal>(viewportHeight, contentHeight);
 
-   m_currentSceneWaveWidth = scaleX(std::max<qreal>(100.0, m_logicalEndTime));
+   const qreal logicalWaveWidth =
+      scaleX(std::max<qreal>(100.0, m_logicalEndTime));
+   const qreal viewportWaveWidth =
+      m_view ? qreal(m_view->viewport()->width()) : 0.0;
+
+   m_currentSceneWaveWidth = std::max(logicalWaveWidth, viewportWaveWidth);
 
    m_scene->setSceneRect(0.0, 0.0, m_currentSceneWaveWidth, sceneHeight);
+   m_scene->setWaveRowWidth(m_currentSceneWaveWidth - WaveLeftMargin);
 }
 
 void WaveDisplayWidget::rebuildRows()

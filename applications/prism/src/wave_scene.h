@@ -34,6 +34,7 @@ class WaveScene : public QGraphicsScene
       QString              valueAt(QTreeWidgetItem* item, qreal x) const;
       QTreeWidgetItem*     itemAtScenePos(const QPointF& scenePos) const;
       void                 setPixelsPerUnit(qreal pixelsPerUnit);
+      void                 setWaveRowWidth(qreal width);
 
       void                 setQueryMatches(const QVector<WaveQueryEngine::WaveQueryMatch>& matches);
       void                 clearQueryMatches();
