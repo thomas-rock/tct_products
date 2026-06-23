@@ -14,7 +14,11 @@ class BusRenderer : public IWaveRenderer
                            BusRenderer() = default;
 
       void                 setSegments(const QVector<WaveSegment>& segments);
-      void                 setFieldSegments(const QVector<WaveSegment>& segments, int msb, int lsb);
+      void                 setFieldSegments(const QVector<WaveSegment>& segments,
+                                            int signalMsb,
+                                            int signalLsb,
+                                            int msb,
+                                            int lsb);
       void                 setStyle(const WaveStyle& style);
       void                 setPixelsPerUnit(qreal pixelsPerUnit) override;
 

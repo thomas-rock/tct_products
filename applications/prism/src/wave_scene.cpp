@@ -51,7 +51,10 @@ WaveTrackItem* WaveScene::addDisplayNodeRow(QTreeWidgetItem* item,
       if (displayNode->signal->kind == WaveSignalKind::Bit)
          bit->setSegments(displayNode->signal->segments);
       else
-         bit->setBusBitSegments(displayNode->signal->segments, displayNode->msb);
+         bit->setBusBitSegments(displayNode->signal->segments,
+                                displayNode->signal->msb,
+                                displayNode->signal->lsb,
+                                displayNode->msb);
 
       renderer = std::move(bit);
    }
@@ -64,7 +67,10 @@ WaveTrackItem* WaveScene::addDisplayNodeRow(QTreeWidgetItem* item,
          auto bit = std::make_unique<BitRenderer>();
          bit->setStyle(displayNode->signal->style);
          bit->setPixelsPerUnit(pixelsPerUnit);
-         bit->setBusBitSegments(displayNode->signal->segments, displayNode->msb);
+         bit->setBusBitSegments(displayNode->signal->segments,
+                                displayNode->signal->msb,
+                                displayNode->signal->lsb,
+                                displayNode->msb);
          renderer = std::move(bit);
       }
       else
@@ -73,6 +79,8 @@ WaveTrackItem* WaveScene::addDisplayNodeRow(QTreeWidgetItem* item,
          bus->setStyle(displayNode->signal->style);
          bus->setPixelsPerUnit(pixelsPerUnit);
          bus->setFieldSegments(displayNode->signal->segments,
+                               displayNode->signal->msb,
+                               displayNode->signal->lsb,
                                displayNode->msb,
                                displayNode->lsb);
          renderer = std::move(bus);

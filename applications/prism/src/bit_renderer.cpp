@@ -23,7 +23,10 @@ void BitRenderer::setSegments(const QVector<WaveSegment>& segments)
    }
 }
 
-void BitRenderer::setBusBitSegments(const QVector<WaveSegment>& segments, int bitIndex)
+void BitRenderer::setBusBitSegments(const QVector<WaveSegment>& segments,
+                                    int signalMsb,
+                                    int signalLsb,
+                                    int bitIndex)
 {
    m_states.clear();
    m_states.reserve(segments.size());
@@ -33,7 +36,7 @@ void BitRenderer::setBusBitSegments(const QVector<WaveSegment>& segments, int bi
       m_states.push_back({
          seg.startTime,
          seg.endTime,
-         WaveValueUtils::extractBusBit(seg.value, bitIndex)
+         WaveValueUtils::extractBusBit(seg.value, signalMsb, signalLsb, bitIndex)
       });
    }
 }

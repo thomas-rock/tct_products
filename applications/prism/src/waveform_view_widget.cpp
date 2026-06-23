@@ -431,7 +431,18 @@ void WaveformViewWidget::rebuildWaveNameTreeFromWaveRoots()
       else
          item = new QTreeWidgetItem(m_waveNameTree);
 
-      item->setText(SignalTreeWidget::NameColumn, node->name);
+      QString nodeName = node->name;
+      if (nodeName.isEmpty() &&
+          node->kind == DisplayNodeKind::Bit &&
+          node->msb == node->lsb)
+      {
+         nodeName = parentItem ? QString("[%1]").arg(node->msb)
+                               : QString("%1[%2]")
+                                    .arg(node->signal ? node->signal->name : QString())
+                                    .arg(node->msb);
+      }
+
+      item->setText(SignalTreeWidget::NameColumn, nodeName);
 
       if (node->kind == DisplayNodeKind::Group)
       {
@@ -1516,7 +1527,7 @@ WaveformViewWidget::makeSignalDisplayNode(WaveSignal* sig,
 
    if (sig->width > 1)
    {
-      for (int bit = sig->width - 1; bit >= 0; --bit)
+      for (int bit = sig->msb; bit >= sig->lsb; --bit)
       {
          QString name = QString("[%1]").arg(bit);
 
@@ -1531,6 +1542,8 @@ WaveformViewWidget::makeSignalDisplayNode(WaveSignal* sig,
          sigNode->addChild(std::move(bitNode));
       }
    }
+   else if (sig->width == 1 && sig->msb != 0)
+      sigNode->name.append(QString("[%1]").arg(sig->msb));
 
    return sigNode;
 }

@@ -187,6 +187,9 @@ void VcdParser::parseVar ()
                                            (size <= 1) ?  WaveSignalKind::Bit : WaveSignalKind::Bus,
                                            size,
                                            m_scopeStack.last()->fullPath);
+   state.signal->msb = msb_select;
+   state.signal->lsb = lsb;
+   state.signal->type = getType(var_type);
    m_scopeStack.last()->signalList.push_back(state.signal);
    m_signals.push_back(state);
 }
@@ -402,6 +405,28 @@ quint64 VcdParser::parseTimeValue()
    return value;
 }
 
+WaveSignalType VcdParser::getType (const QString& var_type)
+{
+   if      (var_type == "event")     return WaveSignalType::Event;
+   else if (var_type == "integer")   return WaveSignalType::Integer;
+   else if (var_type == "parameter") return WaveSignalType::Parameter;
+   else if (var_type == "real")      return WaveSignalType::Real;
+   else if (var_type == "realtime")  return WaveSignalType::Realtime;
+   else if (var_type == "reg")       return WaveSignalType::Reg;
+   else if (var_type == "supply0")   return WaveSignalType::Supply0;
+   else if (var_type == "supply1")   return WaveSignalType::Supply1;
+   else if (var_type == "time")      return WaveSignalType::Time;
+   else if (var_type == "tri")       return WaveSignalType::Tri;
+   else if (var_type == "triand")    return WaveSignalType::Triand;
+   else if (var_type == "trior")     return WaveSignalType::Trior;
+   else if (var_type == "trireg")    return WaveSignalType::Trireg;
+   else if (var_type == "tri0")      return WaveSignalType::Tri0;
+   else if (var_type == "tri1")      return WaveSignalType::Tri1;
+   else if (var_type == "wand")      return WaveSignalType::Wand;
+   else if (var_type == "wire")      return WaveSignalType::Wire;
+   else if (var_type == "wor")       return WaveSignalType::Wor;
+   else                              return WaveSignalType::Wire;
+}
 
 
 //------ tokenizer functions ----------------------------

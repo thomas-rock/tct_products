@@ -23,7 +23,11 @@ void BusRenderer::setSegments(const QVector<WaveSegment>& segments)
    }
 }
 
-void BusRenderer::setFieldSegments(const QVector<WaveSegment>& segments, int msb, int lsb)
+void BusRenderer::setFieldSegments(const QVector<WaveSegment>& segments,
+                                   int signalMsb,
+                                   int signalLsb,
+                                   int msb,
+                                   int lsb)
 {
    m_states.clear();
    m_states.reserve(segments.size());
@@ -32,7 +36,7 @@ void BusRenderer::setFieldSegments(const QVector<WaveSegment>& segments, int msb
    {
       QString value;
       for (int bit = msb; bit >= lsb; --bit)
-         value += WaveValueUtils::extractBusBit(seg.value, bit);
+         value += WaveValueUtils::extractBusBit(seg.value, signalMsb, signalLsb, bit);
 
       m_states.push_back({
          seg.startTime,

@@ -238,6 +238,7 @@ class VcdParser : public QObject
       void              expectKeyword(const QString& keyword);
       int               parseDecimalNumber();
       quint64           parseTimeValue();
+      WaveSignalType    getType (const QString& var_type);
 
 
       // tokenizer functions

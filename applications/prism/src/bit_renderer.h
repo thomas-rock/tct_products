@@ -13,7 +13,10 @@ class BitRenderer : public IWaveRenderer
                         BitRenderer() = default;
 
    void                 setSegments(const QVector<WaveSegment>& segments);
-   void                 setBusBitSegments(const QVector<WaveSegment>& segments, int bitIndex);
+   void                 setBusBitSegments(const QVector<WaveSegment>& segments,
+                                          int signalMsb,
+                                          int signalLsb,
+                                          int bitIndex);
    void                 setStyle(const WaveStyle& style);
    void                 setPixelsPerUnit(qreal pixelsPerUnit) override;
 

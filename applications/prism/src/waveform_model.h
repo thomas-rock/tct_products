@@ -17,6 +17,28 @@ enum class WaveSignalKind
    Bus
 };
 
+enum class WaveSignalType
+{
+   Event,
+   Integer,
+   Parameter,
+   Real,
+   Realtime,
+   Reg,
+   Supply0,
+   Supply1,
+   Time,
+   Tri,
+   Triand,
+   Trior,
+   Trireg,
+   Tri0,
+   Tri1,
+   Wand,
+   Wire,
+   Wor
+};
+
 struct WaveStyle
 {
    QColor normalColor { QColor(0, 255, 0) };   // green
@@ -48,14 +70,16 @@ struct WaveSegment
 class WaveSignal
 {
    public:
-      QString name;       // leaf name, e.g. "clk"
-      QString scopePath;  // e.g. "top.cpu"
-      QString fullPath;   // e.g. "top.cpu.clk"
-      int     width = 1;
-
-      WaveSignalKind kind = WaveSignalKind::Bus;
+      QString              name;       // leaf name, e.g. "clk"
+      QString              scopePath;  // e.g. "top.cpu"
+      QString              fullPath;   // e.g. "top.cpu.clk"
+      int                  width = 1;
+      int                  msb   = 0;
+      int                  lsb   = 0;
+      WaveSignalType       type  = WaveSignalType::Wire;
+      WaveSignalKind       kind  = WaveSignalKind::Bus;
       QVector<WaveSegment> segments;
-      WaveStyle style;
+      WaveStyle            style;
 
       WaveSignal() = default;
 
@@ -198,7 +222,7 @@ class DisplayNode
             if (signal->kind == WaveSignalKind::Bit)
                return WaveValueUtils::normalizeBitValue(base);
 
-            return WaveValueUtils::extractBusBit(base, msb);
+            return WaveValueUtils::extractBusBit(base, signal->msb, signal->lsb, msb);
          }
 
          case DisplayNodeKind::Field:
@@ -210,7 +234,11 @@ class DisplayNode
             result.reserve(msb - lsb + 1);
 
             for (int bit = msb; bit >= lsb; --bit)
-               result += WaveValueUtils::extractBusBit(base, bit);
+               result += WaveValueUtils::extractBusBit(
+                  base,
+                  signal->msb,
+                  signal->lsb,
+                  bit);
 
             return result;
          }
@@ -341,7 +369,7 @@ class DisplayNode
             // Rebuild bit decomposition automatically for buses.
             if (sig->width > 1)
             {
-               for (int bit = sig->width - 1; bit >= 0; --bit)
+               for (int bit = sig->msb; bit >= sig->lsb; --bit)
                {
                   auto bitNode =
                      std::make_unique<DisplayNode>(

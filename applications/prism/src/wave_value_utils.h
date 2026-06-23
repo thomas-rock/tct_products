@@ -1,6 +1,7 @@
 // wave_value_utils.h
 #pragma once
 #include <QString>
+#include <algorithm>
 
 namespace WaveValueUtils
 {
@@ -28,6 +29,30 @@ namespace WaveValueUtils
       const int charIndex = (width - 1) - bitIndex;
 
       if (charIndex < 0 || charIndex >= width)
+         return "X";
+
+      return normalizeBitValue(QString(busValue[charIndex]));
+   }
+
+   inline QString extractBusBit(const QString& busValue,
+                                int signalMsb,
+                                int signalLsb,
+                                int bitIndex)
+   {
+      if (busValue.isEmpty())
+         return "X";
+
+      const int lo = std::min(signalMsb, signalLsb);
+      const int hi = std::max(signalMsb, signalLsb);
+
+      if (bitIndex < lo || bitIndex > hi)
+         return "X";
+
+      const int charIndex =
+         (signalMsb >= signalLsb) ? (signalMsb - bitIndex)
+                                  : (bitIndex - signalMsb);
+
+      if (charIndex < 0 || charIndex >= busValue.size())
          return "X";
 
       return normalizeBitValue(QString(busValue[charIndex]));
