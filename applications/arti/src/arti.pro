@@ -23,7 +23,7 @@ STYLES    = $$TOP/resources/styles
 
 TEMPLATE     = app
 CONFIG      += qt warn_on exceptions debug_and_release c++17
-win32:CONFIG += console
+#win32:CONFIG += console
 TARGET       = arti
 DESTDIR      = $$DIST/bin
 OBJECTS_DIR  = .obj
@@ -31,12 +31,16 @@ MOC_DIR      = .moc
 UI_DIR       = .ui
 RCC_DIR      = .rcc
 
-QT          += core gui widgets concurrent
+QT          += core gui widgets concurrent webenginewidgets
 
+LIBS += -L$$DIST/lib/3rdparty/cmark-gfm  -lcmark-gfm -lcmark-gfm-extensions
 
 INCLUDEPATH += \
    dialogs \
-   $$PWD
+   $$PWD \
+   $$TOP/3rdparty/cmark-gfm/src \
+   $$TOP/3rdparty/cmark-gfm/build/src \
+   $$TOP/3rdparty/cmark-gfm/extensions
 
 RESOURCES += \
    ../icons/arti.qrc \

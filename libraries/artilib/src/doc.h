@@ -50,15 +50,10 @@ namespace artiLib
                                     Doc ();
 
          void                       addText (const QString& text);
-         void                       addHtml (const QString& html);
-         void                       addMarkdown (const QString& md);
          void                       align (const QString& label);
          void                       setIndentDelta (int delta);
          QString                    toString ();
          QString                    lastChar();
-         bool                       isText () {return m_text;}
-         bool                       isHtml () {return m_html;}
-         bool                       isMd () {return m_md;}
 
       Q_SIGNALS:
          void                       message (MessageType type, const QString& msg, const QString& file = {}, int line = -1, int col = -1);
@@ -71,9 +66,5 @@ namespace artiLib
          QTextCursor                      m_cursor;
          QMultiMap<QString, alignData*>   m_alignData;    // <align_label, alignData objects containing align_label>
          QTextBlock                       m_iterBlock;
-         bool                             m_text = false;
-         bool                             m_html = false;
-         bool                             m_md   = false;
    };
-   typedef std::shared_ptr<Doc> DocPtr;
 }

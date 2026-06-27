@@ -37,15 +37,11 @@ namespace artiLib
                            Renderer ();
                            ~Renderer () override;
 
-         void              setRtf (bool state);
-         void              setPlaintext (bool state);
-         void              setMarkdown (bool state);
          void              setMaxLoops (int max);
 
          bool              check (const QString filename);
          bool              render (const QString& arti_name, const QMap<QString, QString>& context, const QStringList& incpaths);
          QString           artifact ();
-         DocPtr            doc ();
 
       Q_SIGNALS:
          void              message (MessageType type, const QString& msg, const QString& file, int line, int col);

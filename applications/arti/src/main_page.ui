@@ -104,7 +104,7 @@
 }</string>
              </property>
              <property name="title">
-              <string>Include Paths</string>
+              <string>Template Paths</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -162,37 +162,6 @@
               <string>Render Options</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_6">
-              <item>
-               <widget class="QRadioButton" name="plaintext">
-                <property name="text">
-                 <string>Create Plain Text Document</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="rtf">
-                <property name="text">
-                 <string>Create RTF Document</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="markdown">
-                <property name="text">
-                 <string>Create Markdown Document</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="Line" name="line">
-                <property name="styleSheet">
-                 <string notr="true">background-color: rgb(0, 85, 255);</string>
-                </property>
-                <property name="orientation">
-                 <enum>Qt::Orientation::Horizontal</enum>
-                </property>
-               </widget>
-              </item>
               <item>
                <widget class="QCheckBox" name="infoCheck">
                 <property name="text">
@@ -503,8 +472,6 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../resources/icons/development/development_icons.qrc"/>
-  <include location="../../../resources/icons/development/development_icons.qrc"/>
   <include location="../../../resources/icons/basic/basic_icons.qrc"/>
   <include location="../../../resources/icons/basic/basic_icons.qrc"/>
   <include location="../../../resources/icons/development/development_icons.qrc"/>
@@ -515,6 +482,8 @@
   <include location="../../../resources/icons/development/development_icons.qrc"/>
   <include location="../../../resources/icons/basic/basic_icons.qrc"/>
   <include location="../../../resources/icons/basic/basic_icons.qrc"/>
+  <include location="../../../resources/icons/development/development_icons.qrc"/>
+  <include location="../../../resources/icons/development/development_icons.qrc"/>
  </resources>
  <connections/>
 </ui>

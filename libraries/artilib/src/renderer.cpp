@@ -27,9 +27,6 @@ using namespace artiLib;
 Renderer::Renderer () : QObject() {m_engine = new Engine();}
 Renderer::~Renderer() {delete m_engine;}
 //-----------------------------------------------------------------------------
-void Renderer::setRtf (bool state) {m_engine->setRtf(state);}
-void Renderer::setPlaintext (bool state) {m_engine->setPlaintext(state);}
-void Renderer::setMarkdown (bool state) {m_engine->setMarkdown(state);}
 void Renderer::setMaxLoops (int max) {m_engine->setMaxLoops(max);}
 //-----------------------------------------------------------------------------
 bool Renderer::check (const QString filename)
@@ -81,7 +78,6 @@ bool Renderer::render (const QString& arti_name, const QMap<QString, QString>& c
 }
 
 QString Renderer::artifact () {return m_engine->artifact();}
-DocPtr Renderer::doc () {return m_engine->doc();}
 //-----------------------------------------------------------------------------
 QVariant Renderer::readJson (const QString& filename)
 {

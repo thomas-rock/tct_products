@@ -18,7 +18,7 @@
 #pragma once
 
 #include <QMainWindow>
-#include "doc.h"
+#include <QTextBrowser>
 
 namespace Ui {class Preview;}
 class Preview : public QMainWindow
@@ -29,7 +29,7 @@ class Preview : public QMainWindow
       explicit          Preview (QWidget* parent = nullptr);
                         ~Preview () override;
 
-      void              addDocument (const QString& filename, artiLib::DocPtr doc);
+      void              addArtifact (const QString& filename, const QString& artifact);
 
    protected Q_SLOTS:
       void              tabChanged (int index);
@@ -38,11 +38,12 @@ class Preview : public QMainWindow
 
    protected:
       void              closeEvent (QCloseEvent *event) override;
+      bool              isLikelyHtml (const QString& text);
+      bool              isLikelyMarkdown (const QString& text);
+      QString           textToHtml (const QString& text);
+      QString           markdownToHtmlGfm(const QString& markdown);
 
    private:
       Ui::Preview*      m_ui;
       QLabel*           m_filename;
-      QMap<QString, artiLib::DocPtr> m_docs;
-
-
 };

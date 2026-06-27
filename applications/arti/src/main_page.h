@@ -43,9 +43,6 @@ class MainPage : public QMainWindow
       QStringList             incpaths () const;
       QMap<QString, QString>  context () const;
       QString                 outfile () const;
-      bool                    rtf () const;
-      bool                    plaintext () const;
-      bool                    markdown () const;
       bool                    transcript () const;
       bool                    preview () const;
 
@@ -54,7 +51,7 @@ class MainPage : public QMainWindow
       void                    check ();
 
    Q_SIGNALS:
-      void                    initialChanged (const QString& path);
+      void                    rootChanged (const QString& path);
       void                    editRequest (QString);
 
    protected Q_SLOTS:
@@ -68,7 +65,7 @@ class MainPage : public QMainWindow
       void                    saveConfig ();
       void                    clearConfig (bool force = false);
 
-      void                    setInitial (const QString);
+      void                    setRoot (const QString);
       void                    openFile ();
 
    protected:
@@ -77,7 +74,7 @@ class MainPage : public QMainWindow
 
    private:
       Ui::MainPage*           m_ui;
-      QLabel*                 m_initial_template;
+      QLabel*                 m_root_template;
       Preview*                m_preview;
       QProcess                m_process;
 };

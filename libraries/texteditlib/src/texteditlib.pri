@@ -27,5 +27,5 @@ INCLUDEPATH += \
    $$PWD \
    $$TOP/3rdparty/QScintilla_src-2.14.1/src
 
-LIBS        += -ltexteditlib -lqscintilla2_qt6d
-LIBS        += -L$$DIST/lib/3rdparty/qscintilla -lqscintilla2_qt6d
+LIBS        += -ltexteditlib -lqscintilla2_qt6
+LIBS        += -L$$DIST/lib/3rdparty/qscintilla -lqscintilla2_qt6

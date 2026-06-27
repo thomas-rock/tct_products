@@ -25,7 +25,7 @@
 
 using namespace artiLib;
 
-Engine::Engine (const QStringList& incpaths) : QObject(), m_rtf(false), m_plaintext(true), m_markdown(false), m_errors(0), m_warnings(0)
+Engine::Engine (const QStringList& incpaths) : QObject(), m_errors(0), m_warnings(0)
 {
    // make incpaths absolute paths
    foreach (QString path, incpaths) {
@@ -34,18 +34,16 @@ Engine::Engine (const QStringList& incpaths) : QObject(), m_rtf(false), m_plaint
       if (!cpath.isEmpty()) m_incpaths.append(cpath);
    }
 
-   m_doc = std::make_shared<Doc>();
-   connect(m_doc.get(), SIGNAL(message(MessageType,QString,QString,int,int)), this, SLOT(handleMessage(MessageType, QString,QString,int,int)));
+   m_doc = new Doc();
+   connect(m_doc, SIGNAL(message(MessageType,QString,QString,int,int)), this, SLOT(handleMessage(MessageType, QString,QString,int,int)));
 }
 Engine::~Engine ()
 {
    m_parseData.clear();
    while (m_variableStack.size()) delete m_variableStack.pop();
+   delete m_doc;
 }
 //----------------------------------------------------------------------------
-void Engine::setRtf (bool state) {m_rtf = state;}
-void Engine::setPlaintext (bool state) {m_plaintext = state;}
-void Engine::setMarkdown (bool state) {m_markdown = state;}
 void Engine::setMaxLoops (int max) {m_maxLoops = max;}
 //----------------------------------------------------------------------------
 bool Engine::check (const QString& filename)
@@ -137,10 +135,8 @@ bool Engine::render(const QString& arti, QVariantMap contexts)
 
    return true;
 }
-QString Engine::artifact () {return (m_rtf)       ? m_doc->toHtml()     :
-                                    (m_plaintext) ? m_doc->toString()   :
-                                    (m_markdown)  ? m_doc->toMarkdown() : m_doc->toString();
-                            }
+QString Engine::artifact () {return m_doc->toString();}
+
 //-----------------------------------------------------------------------------
 void Engine::handleMessage (MessageType type, const QString& msg, const QString& file, int line, int col)
 {
@@ -171,9 +167,7 @@ void Engine::exec ( ArtiNodePtr n)
    {
       case ArtiToken::Align       :
       {
-         if      (m_rtf) handleMessage(SysWarning, QString("align tag ignored in rtf mode"), m_filenames.last(), n->loc.line, n->loc.position);
-         else if (m_markdown) handleMessage(SysWarning, QString("'align' tag ignored in markdown mode"), m_filenames.last(), n->loc.line, n->loc.position);
-         else m_doc->align(eval(n->children.at(0)).toString());
+         m_doc->align(eval(n->children.at(0)).toString());
          break;
       }
       case ArtiToken::Eval        : m_doc->addText(toString(eval(n->children.at(0))));break;
@@ -953,39 +947,37 @@ QVariant Engine::doFunc (const QString& name, QVariantList& args, const quint32 
 //-----------------------------------------------------------------------------
 void Engine::writeText (const QString& text)
 {
-   if (m_rtf) m_doc->addHtml(text);
-   else if (m_markdown) m_doc->addMarkdown(text);
-   else {
-      QString last_char = m_doc->lastChar();
 
-      // check for start of new line and handle indentations
-      if ((last_char.isEmpty()) || (m_doc->lastChar() == "\n")) {
-         int indent = 0;
-         QString line;
-         bool leading = true;
-         for (int index = 0; index < text.size(); index++) {
-            QChar c = text[index];
-            if (leading && c.isSpace() && c != '\r' && c != '\n') {
-               indent++;
-            }
-            else {
-               leading = false;
-               line.append(c);
-            }
-         }
+   QString last_char = m_doc->lastChar();
 
-         if (indent != m_indent) {
-            m_doc->setIndentDelta(indent - m_indent);
-            m_indent += (indent-m_indent);
+   // check for start of new line and handle indentations
+   if ((last_char.isEmpty()) || (m_doc->lastChar() == "\n")) {
+      int indent = 0;
+      QString line;
+      bool leading = true;
+      for (int index = 0; index < text.size(); index++) {
+         QChar c = text[index];
+         if (leading && c.isSpace() && c != '\r' && c != '\n') {
+            indent++;
          }
-         m_doc->addText(line);
+         else {
+            leading = false;
+            line.append(c);
+         }
       }
 
-      // not new line
-      else
-         m_doc->addText(text);
+      if (indent != m_indent) {
+         m_doc->setIndentDelta(indent - m_indent);
+         m_indent += (indent-m_indent);
+      }
+      m_doc->addText(line);
    }
+
+   // not new line
+   else
+      m_doc->addText(text);
 }
+
 bool Engine::isArray (const QVariant& value) const {return value.typeId() == QMetaType::QVariantList || value.typeId() == QMetaType::QStringList;}
 bool Engine::isInt (const QVariant& value) const {return value.typeId() == QMetaType::LongLong || value.typeId() == QMetaType::Int;}
 bool Engine::isMap (const QVariant& value) const {return value.typeId() == QMetaType::QVariantMap;}

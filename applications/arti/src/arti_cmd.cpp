@@ -45,7 +45,6 @@ void ArtiCmd::run (const QStringList& args)
    sendMessage(SysStatus, QString("Starting artifact generation using template '%1'\n").arg(initial));
 
    artiLib::Renderer a;
-   a.setRtf(parser.rtf());
    if (a.render(initial, parser.context(), parser.incpaths())) {
       QString artifact = a.artifact();
 

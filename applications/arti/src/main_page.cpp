@@ -36,10 +36,10 @@ MainPage::MainPage(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::MainPage
    m_preview->hide();
 
    // add status
-   m_initial_template = new QLabel;
-   QLabel* title = new QLabel("Initial Template:  ");
+   m_root_template = new QLabel;
+   QLabel* title = new QLabel("Root Template:  ");
    m_ui->statusBar->addWidget(title);
-   m_ui->statusBar->addWidget(m_initial_template);
+   m_ui->statusBar->addWidget(m_root_template);
 
    // setup controls
    connect(m_ui->preferencesAct,    &QAction::triggered,
@@ -77,8 +77,8 @@ MainPage::MainPage(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::MainPage
    connect(m_ui->templates,      &TemplateList::editRequest,
            this,                 &MainPage::editRequest);
 
-   connect(m_ui->templates,      &TemplateList::initialChanged,
-           this,                 &MainPage::setInitial);
+   connect(m_ui->templates,      &TemplateList::rootChanged,
+           this,                 &MainPage::setRoot);
 }
 
 MainPage::~MainPage() {delete m_ui;}
@@ -102,15 +102,12 @@ void MainPage::run ()
 
    if (settings.value("clearOnRun", false).toBool()) m_ui->transcript->clear();
 
-   QString initial = m_ui->templates->initialPath();
+   QString root = m_ui->templates->rootPath();
 
    artiLib::Renderer arti;
    connect(&arti, SIGNAL(message(int, QString, QString, int, int)), this, SLOT(addMessage(int, QString, QString, int, int)));
-   arti.setRtf(m_ui->rtf->isChecked());
-   arti.setPlaintext(m_ui->plaintext->isChecked());
-   arti.setMarkdown(m_ui->markdown->isChecked());
    arti.setMaxLoops(settings.value("maxLoops", 100).toInt());
-   if (arti.render(initial, context(), incpaths())) {
+   if (arti.render(root, context(), incpaths())) {
       QString artifact = arti.artifact();
 
       if (trans) {
@@ -120,7 +117,7 @@ void MainPage::run ()
          m_ui->transcript->addMessage(SysInfo, QString(80, '-'));
       }
       if (prev) {
-         m_preview->addDocument(initial, arti.doc());
+         m_preview->addArtifact(root, arti.artifact());
          m_preview->show();
       }
       if (!outfile.isEmpty()) {
@@ -173,9 +170,6 @@ void MainPage::saveState (QSettings& settings)
 QStringList MainPage::incpaths () const {return m_ui->incpaths->paths();}
 QMap<QString, QString> MainPage::context () const {return m_ui->context->defines();}
 QString MainPage::outfile () const {return (m_ui->outfileCheck->isChecked()) ? m_ui->outfileEntry->text() : QString();}
-bool MainPage::rtf () const {return m_ui->rtf->isChecked();}
-bool MainPage::plaintext () const {return m_ui->plaintext->isChecked();}
-bool MainPage::markdown () const {return m_ui->markdown->isChecked();}
 bool MainPage::transcript () const {return m_ui->transcriptCheck->isChecked();}
 bool MainPage::preview () const {return m_ui->previewCheck->isChecked();}
 //-----------------------------------------------------------------------------
@@ -263,17 +257,16 @@ void MainPage::clearConfig (bool force)
       m_ui->context->clear();
       m_ui->outfileEntry->clear();
 
-      m_ui->plaintext->click();
       if (transcript()) m_ui->transcriptCheck->click();
       if (preview()) m_ui->previewCheck->click();
       if (m_ui->outfileCheck->isChecked())    m_ui->outfileCheck->click();
    }
 }
 //-----------------------------------------------------------------------------
-void MainPage::setInitial (const QString path)
+void MainPage::setRoot (const QString path)
 {
-   m_initial_template->setText(path);
-   emit initialChanged(path);
+   m_root_template->setText(path);
+   emit rootChanged(path);
 }
 void MainPage::openFile ()
 {
@@ -313,10 +306,6 @@ void MainPage::readConfig (QTextStream& cstream)
       m_ui->outfileEntry->setText(outfile);
       m_ui->outfileCheck->click();
    }
-
-   m_ui->rtf->setChecked(parser.rtf());
-   m_ui->plaintext->setChecked(parser.plaintext());
-   m_ui->markdown->setChecked(parser.markdown());
    m_ui->transcriptCheck->setChecked(parser.transcript());
    m_ui->previewCheck->setChecked(parser.preview());
 
@@ -328,9 +317,9 @@ void MainPage::readConfig (QTextStream& cstream)
    m_ui->errorCheck->setChecked(quiet.contains("e"));
    m_ui->fatalCheck->setChecked(quiet.contains("f"));
 
-   QString initial = parser.initial();
-   m_ui->templates->setInitialPath(initial);
-   setInitial(initial);
+   QString root = parser.initial();
+   m_ui->templates->setRootPath(root);
+   setRoot(root);
 }
 void MainPage::writeConfig (QTextStream& cstream)
 {
@@ -344,9 +333,6 @@ void MainPage::writeConfig (QTextStream& cstream)
    QString ofile = outfile();
    if (!ofile.isEmpty()) cstream << QString("--outfile \"%1\"\n").arg(ofile);
 
-   if (rtf()) cstream << QString("--rtf\n");
-   if (plaintext()) cstream << QString("--text\n");
-   if (markdown()) cstream << QString("--markdown\n");
    if (transcript()) cstream << QString("--transcript\n");
    if (preview()) cstream << QString("--preview\n");
 
@@ -359,6 +345,6 @@ void MainPage::writeConfig (QTextStream& cstream)
    if (m_ui->fatalCheck->isChecked()) quiet.append("f");
    if (!quiet.isEmpty()) cstream << QString("--quiet %1\n").arg(quiet);
 
-   QString initial = m_ui->templates->initialPath();
-   if (!initial.isEmpty()) cstream << QString("\"%1\"\n").arg(initial);
+   QString root = m_ui->templates->rootPath();
+   if (!root.isEmpty()) cstream << QString("\"%1\"\n").arg(root);
 }

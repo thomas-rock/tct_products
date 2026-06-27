@@ -19,13 +19,13 @@
 #include <QDir>
 #include <QMenu>
 
-TemplateList::TemplateList (QWidget* parent) : QTreeWidget(parent), m_initial{nullptr}, m_incSubdir{true}, m_expandNew{false}
+TemplateList::TemplateList (QWidget* parent) : QTreeWidget(parent), m_root{nullptr}, m_incSubdir{true}, m_expandNew{false}
 {
    setColumnCount(1);
 
    // context menus
    m_templateContext = new QMenu;
-   m_set_initial = m_templateContext->addAction(QString("Set as initial template"));
+   m_set_root = m_templateContext->addAction(QString("Set as root template"));
    m_templateContext->addSeparator();
    m_open = m_templateContext->addAction(QString("Open in editor"));
 
@@ -38,8 +38,8 @@ TemplateList::TemplateList (QWidget* parent) : QTreeWidget(parent), m_initial{nu
    connect(this,     &QTreeWidget::customContextMenuRequested,
            this,     &TemplateList::contextMenu);
 
-   connect(m_set_initial,  &QAction::triggered,
-           this,           &TemplateList::setCurrentInitial);
+   connect(m_set_root,  &QAction::triggered,
+           this,           &TemplateList::setCurrentRoot);
 
    connect(m_open,   &QAction::triggered,
            this,     &TemplateList::editCurrent);
@@ -52,7 +52,7 @@ QString TemplateList::currentPath ()
    return item->text(1);
 }
 void TemplateList::setExpandNew (bool state) {m_expandNew = state;}
-QString TemplateList::initialPath () {return (m_initial) ? m_initial->text(1) : QString();}
+QString TemplateList::rootPath () {return (m_root) ? m_root->text(1) : QString();}
 //-----------------------------------------------------------------------------
 void TemplateList::addPath (const QString& path)
 {
@@ -86,10 +86,10 @@ void TemplateList::updatePath (QTreeWidgetItem* item)
    // delete each child. Check for active path
    while (item->childCount()) {
       QTreeWidgetItem* child = item->child(0);
-      if (m_initial && child->text(1) == m_initial->text(1)) {
+      if (m_root && child->text(1) == m_root->text(1)) {
          active = child->text(1);
-         m_initial = nullptr;
-         emit initialChanged(QString());
+         m_root = nullptr;
+         emit rootChanged(QString());
       }
       delete child;
    }
@@ -102,7 +102,7 @@ void TemplateList::updatePath (QTreeWidgetItem* item)
    }
 
    if (!active.isEmpty())
-      setInitialPath(active);
+      setRootPath(active);
 }
 
 void TemplateList::removePath (const QString& path)
@@ -113,9 +113,9 @@ void TemplateList::removePath (const QString& path)
       if (item->text(0) == path) {
          for (int index = 0; index < item->childCount(); index++) {
             QTreeWidgetItem* child = item->child(index);
-            if (child == m_initial) {
-               emit initialChanged(QString());
-               m_initial = nullptr;
+            if (child == m_root) {
+               emit rootChanged(QString());
+               m_root = nullptr;
             }
             delete child;
          }
@@ -124,28 +124,28 @@ void TemplateList::removePath (const QString& path)
       }
    }
 }
-void TemplateList::setCurrentInitial ()
+void TemplateList::setCurrentRoot ()
 {
    QTreeWidgetItem* item = currentItem();
    if (!item) return;
 
-   clearInitial();
+   clearRoot();
 
    QFont f = item->font(0);
    f.setBold(true);
    item->setFont(0, f);
    item->setForeground(0, QBrush(Qt::red, Qt::SolidPattern));
-   m_initial = item;
+   m_root = item;
 
-   emit initialChanged(currentPath());
+   emit rootChanged(currentPath());
 }
-void TemplateList::setInitialPath (const QString& path)
+void TemplateList::setRootPath (const QString& path)
 {
    QTreeWidgetItem* item = findItem(path);
    if (!item) return;
 
    setCurrentItem(item);
-   setCurrentInitial();
+   setCurrentRoot();
 }
 void TemplateList::editCurrent ()
 {
@@ -155,7 +155,7 @@ void TemplateList::itemDoubleClicked (QTreeWidgetItem* item) {if (item->parent()
 void TemplateList::contextMenu ()
 {
    QString path = currentPath();
-   m_set_initial->setEnabled(isArtiFile(path));
+   m_set_root->setEnabled(isArtiFile(path));
    m_templateContext->exec(QCursor::pos());
 }
 
@@ -168,15 +168,15 @@ void TemplateList::directoryChanged (const QString& path)
       updatePath(path);
 }
 //-----------------------------------------------------------------------------
-void TemplateList::clearInitial ()
+void TemplateList::clearRoot ()
 {
-   if (m_initial) {
-      m_initial->setForeground(0, QBrush(Qt::black, Qt::SolidPattern));
-      QFont f = m_initial->font(0);
+   if (m_root) {
+      m_root->setForeground(0, QBrush(Qt::black, Qt::SolidPattern));
+      QFont f = m_root->font(0);
       f.setBold(false);
-      m_initial->setFont(0, f);
-      m_initial = nullptr;
-      emit initialChanged(QString());
+      m_root->setFont(0, f);
+      m_root = nullptr;
+      emit rootChanged(QString());
    }
 }
 QTreeWidgetItem* TemplateList::findItem (const QString& path)

@@ -48,7 +48,7 @@ class ArtiGui : public QMainWindow
       void                    setMode (bool state);
 
       // low-level slots
-      void                    initialChanged (const QString& path);
+      void                    rootChanged (const QString& path);
       void                    editFile (QString path);
       void                    closeEvent (QCloseEvent* event) override;
 

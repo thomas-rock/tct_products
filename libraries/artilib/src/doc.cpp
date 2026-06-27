@@ -30,9 +30,7 @@ Doc::Doc () : QTextDocument()
    m_cursor.setCharFormat(format);
 }
 //-----------------------------------------------------------------------------
-void Doc::addText (const QString& text) {m_cursor.insertText(text); m_text = true;}
-void Doc::addHtml (const QString& html) {m_cursor.insertHtml(html); m_html = true;}
-void Doc::addMarkdown (const QString& md) {m_cursor.insertMarkdown(md); m_md = true;}
+void Doc::addText (const QString& text) {m_cursor.insertText(text);/* m_text = true;*/}
 void Doc::align (const QString& label)
 {
    // check if block contains an existing alignData object

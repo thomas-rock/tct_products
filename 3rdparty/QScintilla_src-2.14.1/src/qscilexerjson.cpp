@@ -114,18 +114,22 @@ bool QsciLexerJSON::defaultEolFill(int style) const
 // Returns the font of the text for a style.
 QFont QsciLexerJSON::defaultFont(int style) const
 {
-    QFont f = QsciLexer::defaultFont(style);
-    f.setFamily("Courier");
+    QFont f;
 
     switch (style)
     {
     case CommentLine:
+        f = QsciLexer::defaultFont(style);
         f.setItalic(true);
         break;
 
     case Keyword:
+        f = QsciLexer::defaultFont(style);
         f.setBold(true);
         break;
+
+    default:
+        f = QsciLexer::defaultFont(style);
     }
 
     return f;

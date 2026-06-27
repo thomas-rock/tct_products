@@ -16,7 +16,7 @@ TextTranscript::TextTranscript (QWidget* parent) : QTextEdit(parent), Transcript
 void TextTranscript::addMessage (MessageType type, const QString& msg)
 {
    setTextColor(getColor(type));
-   append(format(type, msg));
+   append(format(type, msg.toHtmlEscaped()));
 
    QScrollBar* sb = verticalScrollBar();
    sb->setSliderPosition(sb->maximum());

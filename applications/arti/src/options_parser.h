@@ -44,7 +44,6 @@ option
    | outfile
    | preview
    | quiet
-   | rtf
    | transcript
    | version
    ;
@@ -65,10 +64,6 @@ incpath
    : (-i | --incpath) value
    ;
 
-markdown
-   : (-m | --markdown)
-   ;
-
 outfile
    : (-o | --outfile) value
    ;
@@ -80,20 +75,12 @@ quiet
    : (-q | --quiet) value
    ;
 
-rtf
-   : (-r | --rtf)
-   ;
-
-plaintext
-   : (-t | --text)
-   ;
-
 transcript
-   : (-T | --transcript)
+   : (-t | --transcript)
    ;
 
 version
-   : (-V | --version)
+   : (-v | --version)
    ;
 
 value
@@ -128,9 +115,6 @@ class OptionsParser  : public QObject
       QMap<QString, QString>  context () const;
       QString                 outfile () const;
       bool                    preview () const;
-      bool                    rtf () const;
-      bool                    plaintext () const;
-      bool                    markdown () const;
       bool                    transcript () const;
       QString                 quiet () const;
       QString                 initial () const;
@@ -148,9 +132,6 @@ class OptionsParser  : public QObject
       void                    parse_incpath ();
       void                    parse_outfile ();
       void                    parse_preview ();
-      void                    parse_rtf ();
-      void                    parse_plaintext ();
-      void                    parse_markdown ();
       void                    parse_transcript ();
       void                    parse_quiet ();
       void                    parse_version ();
@@ -174,9 +155,6 @@ class OptionsParser  : public QObject
       QMap<QString, QString>  m_context;
       QString                 m_outfile;
       bool                    m_preview;
-      bool                    m_rtf;
-      bool                    m_plaintext;
-      bool                    m_markdown;
       bool                    m_transcript;
       QString                 m_quiet;
       QString                 m_initial;

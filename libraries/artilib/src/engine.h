@@ -49,15 +49,11 @@ namespace artiLib
                                  Engine (const QStringList& incpaths = {});
                                  ~Engine () override;
 
-         void                    setRtf (bool state);
-         void                    setPlaintext (bool state);
-         void                    setMarkdown (bool state);
          void                    setMaxLoops (int max);
 
          bool                    check (const QString& filename);
          bool                    render (const QString& arti, QVariantMap contexts);
          QString                 artifact ();
-         DocPtr                  doc () {return m_doc;}
          quint32                 errors () const {return m_errors;}
          quint32                 warnings () const {return m_warnings;}
 
@@ -97,12 +93,9 @@ namespace artiLib
          QVariantList            searchMap (QVariant context, const QString& key);
 
       protected:
-         bool                    m_rtf;
-         bool                    m_plaintext;
-         bool                    m_markdown;
          int                     m_maxLoops;
          QStringList             m_incpaths;
-         DocPtr                  m_doc;
+         Doc*                    m_doc;
          QMap<QString, ArtiDataPtr> m_parseData;
          ArtiDataPtr             m_currentParseData;
 

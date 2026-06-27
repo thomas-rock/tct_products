@@ -41,7 +41,7 @@ RCC_DIR      = .rcc
 
 QT       += gui widgets printsupport
 
-LIBS += -L$$DIST/lib/3rdparty/qscintilla -lqscintilla2_qt6d
+LIBS += -L$$DIST/lib/3rdparty/qscintilla -lqscintilla2_qt6
 
 DEFINES += TEXTEDITLIB_LIBRARY
 DEFINES += QSCINTILLA_DLL

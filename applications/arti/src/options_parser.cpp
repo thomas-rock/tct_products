@@ -34,9 +34,6 @@ OptionsParser::Status OptionsParser::parse (const QString& text)
    m_quiet.clear();
    m_preview = false;
    m_transcript = false;
-   m_rtf = false;
-   m_plaintext = true;         // default
-   m_markdown = false;
    parse_command_line();
    return m_status;
 }
@@ -44,9 +41,6 @@ QStringList OptionsParser::incpaths () const {return m_incpaths;}
 QMap<QString, QString> OptionsParser::context () const {return m_context;}
 QString OptionsParser::outfile () const {return m_outfile;}
 bool OptionsParser::preview () const {return m_preview;}
-bool OptionsParser::rtf () const {return m_rtf;}
-bool OptionsParser::plaintext () const {return m_plaintext;}
-bool OptionsParser::markdown () const {return m_markdown;}
 bool OptionsParser::transcript () const {return m_transcript;}
 QString OptionsParser::quiet () const {return m_quiet;}
 QString OptionsParser::initial () const {return m_initial;}
@@ -76,18 +70,14 @@ void OptionsParser::parse_option ()
    consume_lex();
    if      (opt == "c" || opt == "context")     parse_context();
    else if (opt == "f" || opt == "file")        parse_file();
-   else if (opt == "?" || opt == "help")        parse_help();
-   else if (opt == "h" || opt == "hdlpath")     parse_hdlpath();
+   else if (opt == "h" || opt == "help")        parse_help();
    else if (opt == "i" || opt == "incpath")     parse_incpath();
-   else if (opt == "m" || opt == "markdown")    parse_markdown();
    else if (opt == "o" || opt == "outfile")     parse_outfile();
    else if (opt == "p" || opt == "preview")     parse_preview();
-   else if (opt == "r" || opt == "rtf")         parse_rtf();
-   else if (opt == "t" || opt == "text")        parse_plaintext();
-   else if (opt == "T" || opt == "transcript")  parse_transcript();
-   else if (opt == "v" || opt == "quiet")       parse_quiet();
-   else if (opt == "V" || opt == "version")     parse_version();
-   else syntax_error({"-c", "-f", "-h", "-i", "-o", "-q", "-s", "-t", "-v", "-V"});
+   else if (opt == "t" || opt == "transcript")  parse_transcript();
+   else if (opt == "q" || opt == "quiet")       parse_quiet();
+   else if (opt == "v" || opt == "version")     parse_version();
+   else syntax_error({"-c", "-f", "-h", "-i", "-o", "-p", "-q", "-t", "-v"});
 }
 void OptionsParser::parse_context ()
 {
@@ -122,9 +112,6 @@ void OptionsParser::parse_hdlpath ()    {m_hdlpaths.append(parse_value());}
 void OptionsParser::parse_incpath ()    {m_incpaths.append(parse_value());}
 void OptionsParser::parse_outfile ()    {m_outfile = parse_value();}
 void OptionsParser::parse_preview ()    {m_preview = true;}
-void OptionsParser::parse_rtf ()        {m_rtf = true;  m_plaintext = false; m_markdown = false;}
-void OptionsParser::parse_plaintext ()  {m_rtf = false; m_plaintext = true;  m_markdown = false;}
-void OptionsParser::parse_markdown ()   {m_rtf = false; m_plaintext = false; m_markdown = true;}
 void OptionsParser::parse_transcript () {m_transcript = true;}
 void OptionsParser::parse_version ()    {version(); m_status = Help;}
 void OptionsParser::parse_quiet ()
@@ -172,18 +159,14 @@ void OptionsParser::help ()
       "\n"
       "Options:\n"
       "   -c, --context <name[=value]> Specify a name/value pair to be added to the context. May be specified multiple times.\n"
-      "    ?, --help                   Displays help on commandline options.\n"
+      "   -h, --help                   Displays help on commandline options.\n"
       "   -f. --file <name>            Include options specified in file <name>. May be specified multiple times.\n"
-      "   -h, --hdlpath <path>         Path to search for included hdl files. May be specified multiple times.\n"
       "   -i, --incpath <path>         Path to search for included template files. May be specified multiple times.\n"
-      "   -m, --markdown               Document is a markdown document. Default is plain text document.\n"
       "   -o, --outfile <filename>     Output file name. If omitted, output will sent to stdout.\n"
       "   -q, --quiet                  Suppress informational messages.\n"
       "   -p, --preview                Display generated artifact in preview window.\n"
-      "   -r, --rtf                    Document is an rtf (html) document. Default is plain text document.\n"
-      "   -t, --text                   Document is a plaintext document.\n"
-      "   -T, --transcript             Output generated artifact text to transcript.\n"
-      "   -V, --version                Displays current version and exits.\n"
+      "   -t, --transcript             Output generated artifact text to transcript.\n"
+      "   -v, --version                Displays current version and exits.\n"
       "\n"
       "initial template                Name of initial arti template.\n"
       ;

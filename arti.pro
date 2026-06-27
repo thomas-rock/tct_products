@@ -28,5 +28,8 @@ jsonlib.file         = libraries/jsonlib/src/jsonlib.pro
 texteditlib.file     = libraries/texteditlib/src/texteditlib.pro
 
 # Establish clean build dependencies using the aliases
-arti.depends = artilib commonlib jsonlib texteditlib
+arti.depends        = commonlib texteditlib jsonlib artilib
+texteditlib.depends = commonlib jsonlib
+artilib.depends     = commonlib jsonlib
+jsonlib.depends     = commonlib
 

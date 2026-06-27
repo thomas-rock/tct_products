@@ -36,9 +36,9 @@ ArtiGui::ArtiGui(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::ArtiGui)
 {
    m_ui->setupUi(this);
 
-   setWindowTitle(QString("%1 - %2").arg(APPNAME, VERSION));
+    setWindowTitle(QString("%1 - %2").arg(APPNAME, VERSION));
 
-   m_ui->runAct->setEnabled(false);
+    m_ui->runAct->setEnabled(false);
 
    // add spacer to mode toolbar between mode buttons and control buttons
    QWidget* spacer = new QWidget(this);
@@ -81,8 +81,8 @@ ArtiGui::ArtiGui(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::ArtiGui)
    }
 
    // setup misc connections
-   connect(m_main_page,    &MainPage::initialChanged,
-           this,           &ArtiGui::initialChanged);
+   connect(m_main_page,    &MainPage::rootChanged,
+           this,           &ArtiGui::rootChanged);
 
    connect(m_main_page,    &MainPage::editRequest,
            this,           &ArtiGui::editFile);
@@ -141,7 +141,7 @@ void ArtiGui::setMode (bool state)
 }
 
 //-----------------------------------------------------------------------------
-void ArtiGui::initialChanged (const QString &path)
+void ArtiGui::rootChanged (const QString &path)
 {
    m_ui->runAct->setEnabled(!path.isEmpty());
 }

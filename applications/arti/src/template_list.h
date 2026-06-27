@@ -29,17 +29,17 @@ class TemplateList : public QTreeWidget
 
       QString              currentPath ();
       void                 setExpandNew (bool state);
-      QString              initialPath ();
+      QString              rootPath ();
 
    public Q_SLOTS:
       void                 addPath (const QString& path);
       void                 removePath (const QString& path);
-      void                 setCurrentInitial ();
-      void                 setInitialPath (const QString& path);
+      void                 setCurrentRoot ();
+      void                 setRootPath (const QString& path);
 
    Q_SIGNALS:
       void                 editRequest (const QString& path);
-      void                 initialChanged (const QString &path);
+      void                 rootChanged (const QString &path);
 
    protected Q_SLOTS:
       void                 updatePath (const QString& path);
@@ -50,17 +50,17 @@ class TemplateList : public QTreeWidget
       void                 contextMenu ();
 
    protected:
-      void                 clearInitial ();
+      void                 clearRoot ();
       QTreeWidgetItem*     findItem (const QString& path);
       bool                 isArtiFile (QString path);
 
    private:
       QFileSystemWatcher   m_watcher;
-      QTreeWidgetItem*     m_initial;
+      QTreeWidgetItem*     m_root;
       bool                 m_incSubdir;
       bool                 m_expandNew;
       QMenu*               m_templateContext;
-      QAction*             m_set_initial;
+      QAction*             m_set_root;
       QAction*             m_open;
 
 };
